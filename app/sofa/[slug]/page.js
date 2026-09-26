@@ -1,4 +1,3 @@
-import { client } from '../../../lib/sanity'
 import Header from '../../component/Header'
 import Footer from '../../component/footer'
 import SofaDetail from './SofaDetail'
