@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your existing imports BELOW Tailwind */
+@import './header.module.scss';
+@import './footer.module.scss';
+@import './landing.module.scss';
+@import './aboutus.module.scss';
+@import './sofa.module.scss';
