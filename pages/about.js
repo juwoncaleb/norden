@@ -72,6 +72,7 @@ export default function about() {
         </div>
       </div>
       <Product/>
+      
       <Footer/>
     </div>
   );
