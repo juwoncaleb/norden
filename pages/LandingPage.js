@@ -30,16 +30,16 @@ export default function LandingPage() {
       {/* NORMAL CONTENT BELOW */}
       <section className="discount_div flex justify-center">
         <div className="discount_price">
-          <p className="discount_head">$100 off</p>
-          <p>$1,500 min.spend</p>
+          <p className="discount_head">N 1,000,000 off</p>
+          <p>N1,500,000 min.spend</p>
         </div>
         <div className="discount_price">
           <p className="discount_head">$180 off</p>
-          <p>$2,500 min.spend</p>
+          <p>N1,500,00min.spend</p>
         </div>
         <div className="discount_price">
           <p className="discount_head">$100 off</p>
-          <p>$1,500 min.spend</p>
+          <p>N1,500,000 min.spend</p>
         </div>
       </section>
       <div className="carousel_img">
@@ -62,7 +62,7 @@ export default function LandingPage() {
 
       <div className="bestselling">
         <center>
-          <p className="modo_shop">Shop the look with MODO</p>
+          <p className="modo_shop">Shop the look with NORDEN</p>
           <p className="modo_text">
             Thoughtfully made by people who live in homes, too. That’s why you
             love them so much.
