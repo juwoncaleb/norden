@@ -317,8 +317,12 @@ export default function Header() {
         </nav>
 
         <div className="drawer_footer">
-          <button className="contact_us_button">Contact Us</button>
-        </div>
+<button
+  className="contact_us_button"
+  onClick={() => window.open("https://wa.me/2348030486766", "_blank", "noopener,noreferrer")}
+>
+  Contact Us
+</button>        </div>
       </aside>
 
       <div className="offer_div flex justify-center">
