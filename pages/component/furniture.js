@@ -4,18 +4,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
 const ITEMS = [
-  { id: 1,  image: "/c1.png",  name: "Seb Storage Combination",    subtitle: "Modular Stackable Shelves",           price: "£1,398" },
-  { id: 2,  image: "/c2.png",  name: "Vincent Dining Table",        subtitle: "Slim Tabletop, Solid Walnut",          price: "£799"   },
-  { id: 3,  image: "/c3.png",  name: "Arcadia Storage Combination", subtitle: "Wood, Tempered Glass, Modular",        price: "£1,498" },
-  { id: 4,  image: "/c4.png",  name: "Hamilton Chaise Sofa",        subtitle: "Removable Cushion Covers, Deep Seats", price: "£2,299" },
-  { id: 5,  image: "/c5.png",  name: "Owen Chaise Sofa",            subtitle: "Removable Back & Cushion Covers",      price: "£1,899" },
-  { id: 6,  image: "/c6.png",  name: "Hugg Rectangular Table",      subtitle: "Nested Seat, Oak Finish",              price: "£649"   },
-  { id: 7,  image: "/c7.png",  name: "Cleo Accent Chair",           subtitle: "Boucle Fabric, Swivel Base",           price: "£945"   },
-  { id: 8,  image: "/c8.png",  name: "Marlowe Bookcase",            subtitle: "Open Shelving, Smoked Oak",            price: "£1,150" },
-  { id: 9,  image: "/c9.png",  name: "Pebble Coffee Table",         subtitle: "Travertine Top, Brass Legs",           price: "£880"   },
-  { id: 10, image: "/c10.png", name: "Sienna Floor Lamp",           subtitle: "Linen Shade, Walnut Stem",             price: "£395"   },
-  { id: 11, image: "/c11.png", name: "Ember Velvet Bed Frame",      subtitle: "Low Profile, King Size",               price: "£2,100" },
-  { id: 12, image: "/c12.png", name: "Alto Media Console",          subtitle: "Sliding Cane Doors, Matte Finish",     price: "£1,275" },
+  { id: 1,  image: "/c1.png",  name: "Seb Storage Combination",    subtitle: "Modular Stackable Shelves",           price: "N1,398" },
+  { id: 2,  image: "/c2.png",  name: "Vincent Dining Table",        subtitle: "Slim Tabletop, Solid Walnut",          price: "N799"   },
+  { id: 3,  image: "/c3.png",  name: "Arcadia Storage Combination", subtitle: "Wood, Tempered Glass, Modular",        price: "N1,498" },
+  { id: 4,  image: "/c4.png",  name: "Hamilton Chaise Sofa",        subtitle: "Removable Cushion Covers, Deep Seats", price: "N2,299" },
+  { id: 5,  image: "/c5.png",  name: "Owen Chaise Sofa",            subtitle: "Removable Back & Cushion Covers",      price: "N1,899" },
+  { id: 6,  image: "/c6.png",  name: "Hugg Rectangular Table",      subtitle: "Nested Seat, Oak Finish",              price: "N649"   },
+  { id: 7,  image: "/c7.png",  name: "Cleo Accent Chair",           subtitle: "Boucle Fabric, Swivel Base",           price: "N945"   },
+  { id: 8,  image: "/c8.png",  name: "Marlowe Bookcase",            subtitle: "Open Shelving, Smoked Oak",            price: "N1,150" },
+  { id: 9,  image: "/c9.png",  name: "Pebble Coffee Table",         subtitle: "Travertine Top, Brass Legs",           price: "N880"   },
+  { id: 10, image: "/c10.png", name: "Sienna Floor Lamp",           subtitle: "Linen Shade, Walnut Stem",             price: "N395"   },
+  { id: 11, image: "/c11.png", name: "Ember Velvet Bed Frame",      subtitle: "Low Profile, King Size",               price: "N2,100" },
+  { id: 12, image: "/c12.png", name: "Alto Media Console",          subtitle: "Sliding Cane Doors, Matte Finish",     price: "N1,275" },
 ];
 
 const VISIBLE = 5;
