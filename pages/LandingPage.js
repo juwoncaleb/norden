@@ -5,6 +5,7 @@ import Header from "./component/Header";
 import Footer from "./component/footer";
 import FAQ from "./component/faq";
 import ImageCarousel from "./component/carousel";
+import Link from "next/link";
 
 export default function LandingPage() {
   return (
@@ -20,7 +21,9 @@ export default function LandingPage() {
 
         <div className="hero-content">
           <h1>All you need to create a Home​</h1>
-          <button className="seebtn">See More</button>
+          <Link href="./sofa">
+            <button className="seebtn">See More</button>
+          </Link>
         </div>
       </section>
 
@@ -39,21 +42,23 @@ export default function LandingPage() {
           <p>$1,500 min.spend</p>
         </div>
       </section>
-<div className="carousel_img">
-  {/* TEXTS */}
-  <div className="image__text">
-    <p className="img_txt">
-      From unexpected plus-ones to evenings that don’t go according to
-      plan, these are the pieces that hold everyday chaos together so you
-      can stay exactly where you want to be: in the moment.
-    </p>
-    <button className="selling">Explore the collection</button>
-  </div>
+      <div className="carousel_img">
+        {/* TEXTS */}
+        <div className="image__text">
+          <p className="img_txt">
+            From unexpected plus-ones to evenings that don’t go according to
+            plan, these are the pieces that hold everyday chaos together so you
+            can stay exactly where you want to be: in the moment.
+          </p>
+          <Link href="./sofa">
+            <button className="selling">Explore the collection</button>
+          </Link>
+        </div>
 
-  <div className="carousel_wrap">
-    <ImageCarousel />
-  </div>
-</div>
+        <div className="carousel_wrap">
+          <ImageCarousel />
+        </div>
+      </div>
 
       <div className="bestselling">
         <center>
@@ -79,9 +84,11 @@ export default function LandingPage() {
             have, and all the life that’s waiting to be lived in them.
           </h1>
 
-          <button className="border border-white px-6 py-3 hover:bg-white hover:text-black transition">
-            READ OUR STORY
-          </button>
+          <Link href='./about'>
+            <button className="border border-white px-6 py-3 hover:bg-white hover:text-black transition">
+              READ OUR STORY
+            </button>
+          </Link>
         </div>
       </section>
       <FAQ />
