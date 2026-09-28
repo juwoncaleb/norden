@@ -1,0 +1,121 @@
+$bg: #f6f3e8;
+$text: #3b1b10;
+$muted: #7d7a72;
+$accent: #844025;
+$serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+
+.page {
+  background: $bg;
+  color: $text;
+  font-family: $serif;
+  min-height: 100vh;
+}
+
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 32px 96px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 17px;
+  color: $muted;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: $accent;
+    }
+  }
+}
+
+.title {
+  text-align: center;
+  font-weight: 500;
+  font-size: 48px;
+  letter-spacing: -0.01em;
+  margin: 56px 0 80px;
+}
+
+.heading {
+  font-weight: 500;
+  font-size: 36px;
+  margin: 0 0 28px;
+}
+
+.grid {
+  column-count: 3;
+  column-gap: 48px;
+}
+
+.group {
+  break-inside: avoid;
+  margin-bottom: 48px;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 22px;
+  }
+
+  a {
+    color: $text;
+    text-decoration: none;
+    font-size: 22px;
+    line-height: 1.3;
+
+    &:hover,
+    &:focus-visible {
+      color: $accent;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+}
+
+.groupTitle {
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $accent;
+  margin: 0 0 28px;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: 16px 20px 64px;
+  }
+
+  .title {
+    font-size: 36px;
+    margin: 36px 0 48px;
+  }
+
+  .heading {
+    font-size: 28px;
+  }
+
+  .grid {
+    column-count: 1;
+  }
+
+  .group a {
+    font-size: 20px;
+  }
+}
