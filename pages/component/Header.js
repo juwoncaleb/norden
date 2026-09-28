@@ -138,12 +138,7 @@ export default function Header() {
   };
 
   const logo = (
-    <img
-      className="modo_logo mt-1 mr-8"
-      src="./norden.png"
-      alt="Logo"
-    />
-    
+    <img className="modo_logo mt-1 mr-8" src="./norden.png" alt="Logo" />
   );
 
   return (
@@ -204,7 +199,18 @@ export default function Header() {
 
         {/* DESKTOP CONTACT */}
         <div className="desktop_actions flex mt-2">
-          <button className="contact_us_button">Contact Us</button>
+          <button
+            className="contact_us_button"
+            onClick={() =>
+              window.open(
+                "https://wa.me/2348030486766",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+          >
+            Contact Us
+          </button>{" "}
         </div>
 
         {/* HAMBURGER (mobile only) */}
