@@ -1,3 +1,291 @@
-.lop{
+$rust: #8b3f1f;
+$cream: #f5f0e8;
+
+$bp-tablet: 900px;
+$bp-phone: 600px; // keep in sync with the matchMedia query in Footer.jsx
+
+@mixin tablet {
+  @media (max-width: $bp-tablet) {
+    @content;
+  }
+}
+@mixin phone {
+  @media (max-width: $bp-phone) {
+    @content;
+  }
+}
+
+.lop {
   height: 100px;
+
+  @include tablet {
+    height: 80px;
+  }
+
+  @include phone {
+    height: 60px;
+  }
+}
+
+/* ---------- FOOTER SHELL ---------- */
+.site_footer {
+  background: $rust;
+  color: $cream;
+  padding: 60px 48px 30px;
+  font-family: "Cormorant Garamond", serif;
+
+  @include tablet {
+    padding: 48px 32px 28px;
+  }
+
+  @include phone {
+    padding: 8px 20px 24px;
+  }
+}
+
+/* ---------- TOP GRID ---------- */
+.footer_grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+
+  // tablet: three link columns, newsletter full width underneath
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 28px;
+  }
+
+  // phone: one column, link groups become accordions
+  @include phone {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.footer_col {
+  min-width: 0;
+
+  @include phone {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+}
+
+.footer_h {
+  margin: 0;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+.footer_heading {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+/* The heading is a button on phones only (see Footer.jsx) */
+.footer_toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  padding: 18px 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  font-size: 18px;
+  text-align: left;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid $cream;
+    outline-offset: 2px;
+  }
+}
+
+.footer_chevron {
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+
+  &.is_open {
+    transform: rotate(-135deg);
+  }
+}
+
+.footer_list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include phone {
+    display: none;
+    padding-bottom: 14px;
+
+    &.is_open {
+      display: block;
+    }
+  }
+}
+
+.footer_link {
+  margin: 6px 0;
+  font-size: 14px;
+  opacity: 0.9;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  // easier to tap
+  @include phone {
+    margin: 0;
+    padding: 9px 0;
+    font-size: 15px;
+  }
+}
+
+/* ---------- NEWSLETTER COLUMN ---------- */
+.footer_newsletter {
+  @include tablet {
+    grid-column: 1 / -1;
+    max-width: 480px;
+  }
+
+  @include phone {
+    max-width: none;
+    padding: 28px 0 8px;
+    border-bottom: 0;
+  }
+}
+
+.footer_email {
+  position: relative;
+  margin-top: 16px;
+
+  input {
+    width: 100%;
+    padding: 10px 40px 10px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+
+    &::placeholder {
+      color: rgba(245, 240, 232, 0.7);
+    }
+
+    &:focus {
+      border-bottom-color: $cream;
+    }
+
+    // 16px stops iOS Safari zooming the page when the field is focused
+    @include phone {
+      font-size: 16px;
+    }
+  }
+
+  button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: $cream;
+    color: $rust;
+    cursor: pointer;
+  }
+}
+
+.footer_social_block {
+  margin-top: 30px;
+}
+
+.footer_social {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.footer_social_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+
+  // bigger tap target on phones
+  @include phone {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+.footer_hashtag {
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.footer_logo {
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  text-align: center;
+  letter-spacing: 0.4em;
+  font-size: 18px;
+}
+
+/* ---------- BOTTOM BAR ---------- */
+.footer_bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+
+  @include tablet {
+    margin-top: 40px;
+  }
+
+  @include phone {
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 24px;
+    font-size: 12px;
+  }
+}
+
+.footer_legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+
+  span {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer_chevron {
+    transition: none;
+  }
 }
