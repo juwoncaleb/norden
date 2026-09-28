@@ -242,7 +242,7 @@ export default function Header() {
           <Link href="/" onClick={closeDrawer}>
             <img
               className="modo_logo"
-              src="https://ik.imagekit.io/MM/modo.png"
+              src="/norden.png"
               alt="Logo"
             />
           </Link>
