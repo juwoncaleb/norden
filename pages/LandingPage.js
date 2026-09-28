@@ -34,11 +34,11 @@ export default function LandingPage() {
           <p>N1,500,000 min.spend</p>
         </div>
         <div className="discount_price">
-          <p className="discount_head">$180 off</p>
+          <p className="discount_head">N180,000 off</p>
           <p>N1,500,00min.spend</p>
         </div>
         <div className="discount_price">
-          <p className="discount_head">$100 off</p>
+          <p className="discount_head">$N159,000 off</p>
           <p>N1,500,000 min.spend</p>
         </div>
       </section>
