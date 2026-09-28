@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,51 +17,44 @@ const COLUMNS = [
       { label: "Mirrors", href: "/mirrors" },
     ],
   },
-
-
-{
-  title: "Shopping With Us",
-  links: [
-    { label: "Signature Headboards", href: "/signature" },
-    { label: "Custom Headboards", href: "/custom" },
-
-    { label: "Benches", href: "/benches" },
-    { label: "Dressers", href: "/dresser" },
-    { label: "Consoles", href: "/consoles" },
-
-    { label: "Side Tables", href: "/sidetable" },
-    { label: "Ottomans", href: "/ottomans" },
-    { label: "TV Units", href: "/tvunit" },
-
-    { label: "Bar & Counter Stools", href: "/bar" },
-  ],
-},
-
- {
-  title: "About Us",
-  links: [
-    { label: "Our Story", href: "/about" },
-    { label: "Delivery", href: "/delivery" },
-    { label: "Contact Us", href: "/contact" },
-    { label: "TC", href: "/custom" },
-  ],
-},
+  {
+    title: "Shopping With Us",
+    links: [
+      { label: "Signature Headboards", href: "/signature" },
+      { label: "Custom Headboards", href: "/custom" },
+      { label: "Benches", href: "/benches" },
+      { label: "Dressers", href: "/dresser" },
+      { label: "Consoles", href: "/consoles" },
+      { label: "Side Tables", href: "/sidetable" },
+      { label: "Ottomans", href: "/ottomans" },
+      { label: "TV Units", href: "/tvunit" },
+      { label: "Bar & Counter Stools", href: "/bar" },
+    ],
+  },
+  {
+    title: "About Us",
+    links: [
+      { label: "Our Story", href: "/about" },
+      { label: "Delivery", href: "/delivery" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "TC", href: "/custom" },
+    ],
+  },
 ];
 
 const SOCIAL = ["f", "p", "ig"];
 
 const LEGAL = [
-  "Privacy",
-  "Terms",
-  "Promo Terms*",
-  "The Norden Club Terms",
-  "Sitemap",
-  "Accessibility Statement",
-  "Cookies",
+  { label: "Privacy" },
+  { label: "Terms" },
+  { label: "Promo Terms*" },
+  { label: "The Norden Club Terms" },
+  { label: "Sitemap", href: "/sitemap" },
+  { label: "Accessibility Statement" },
+  { label: "Cookies" },
 ];
 
-const slugify = (text) =>
-  text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 const CSS = `
 .site_footer,
@@ -318,6 +310,15 @@ const CSS = `
   cursor: pointer;
 }
 
+.footer_legal a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer_legal a:hover {
+  text-decoration: underline;
+}
+
 /* =========================
    TABLET
 ========================= */
@@ -426,16 +427,11 @@ const CSS = `
 `;
 
 export default function Footer() {
-
   const [openCol, setOpenCol] = useState(null);
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-
-    const mediaQuery = window.matchMedia(
-      "(max-width: 600px)"
-    );
+    const mediaQuery = window.matchMedia("(max-width: 600px)");
 
     const updateScreen = () => {
       setIsMobile(mediaQuery.matches);
@@ -443,133 +439,62 @@ export default function Footer() {
 
     updateScreen();
 
-    mediaQuery.addEventListener(
-      "change",
-      updateScreen
-    );
+    mediaQuery.addEventListener("change", updateScreen);
 
     return () => {
-      mediaQuery.removeEventListener(
-        "change",
-        updateScreen
-      );
+      mediaQuery.removeEventListener("change", updateScreen);
     };
-
   }, []);
 
   return (
     <footer className="site_footer">
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: CSS,
-        }}
-      />
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
       {/* =========================
           FOOTER GRID
       ========================= */}
 
       <div className="footer_grid">
-
         {COLUMNS.map((column) => {
-
-          const isOpen =
-            openCol === column.title;
-
-          const id =
-            `footer-${slugify(column.title)}`;
+          const isOpen = openCol === column.title;
+          const id = `footer-${slugify(column.title)}`;
 
           return (
-            <div
-              key={column.title}
-              className="footer_col"
-            >
-
+            <div key={column.title} className="footer_col">
               {/* MOBILE HEADING */}
-
               {isMobile ? (
-
                 <h4 className="footer_h">
-
                   <button
                     type="button"
                     className="footer_heading footer_toggle"
-
                     aria-expanded={isOpen}
-
                     aria-controls={id}
-
-                    onClick={() =>
-                      setOpenCol(
-                        isOpen
-                          ? null
-                          : column.title
-                      )
-                    }
+                    onClick={() => setOpenCol(isOpen ? null : column.title)}
                   >
-
                     {column.title}
 
                     <span
-                      className={
-                        `footer_chevron ${
-                          isOpen
-                            ? "is_open"
-                            : ""
-                        }`
-                      }
-
+                      className={`footer_chevron ${isOpen ? "is_open" : ""}`}
                       aria-hidden="true"
                     />
-
                   </button>
-
                 </h4>
-
               ) : (
-
                 /* DESKTOP HEADING */
-
-                <h4 className="footer_heading">
-                  {column.title}
-                </h4>
-
+                <h4 className="footer_heading">{column.title}</h4>
               )}
 
               {/* LINKS */}
-
               <ul
                 id={id}
-
-                className={
-                  `footer_list ${
-                    isOpen
-                      ? "is_open"
-                      : ""
-                  }`
-                }
+                className={`footer_list ${isOpen ? "is_open" : ""}`}
               >
-
                 {column.links.map((item) => (
-
-                  <li
-                    key={item.label}
-                    className="footer_link"
-                  >
-
-                    <Link
-                      href={item.href}
-                    >
-                      {item.label}
-                    </Link>
-
+                  <li key={item.label} className="footer_link">
+                    <Link href={item.href}>{item.label}</Link>
                   </li>
-
                 ))}
-
               </ul>
-
             </div>
           );
         })}
@@ -579,64 +504,38 @@ export default function Footer() {
         ========================= */}
 
         <div className="footer_col footer_newsletter">
-
-          <h4 className="footer_heading">
-The language of space          </h4>
+          <h4 className="footer_heading">The language of space</h4>
 
           <div className="footer_email">
-
             <input
               type="email"
               aria-label="Email address"
               placeholder="Enter your email"
             />
 
-            <button
-              type="button"
-              aria-label="Subscribe"
-            >
+            <button type="button" aria-label="Subscribe">
               →
             </button>
-
           </div>
 
           {/* SOCIAL */}
-
           <div className="footer_social_block">
-
-            <h4 className="footer_heading">
-              Social
-            </h4>
+            <h4 className="footer_heading">Social</h4>
 
             <div className="footer_social">
-
               {SOCIAL.map((icon) => (
-
-                <div
-                  key={icon}
-                  className="footer_social_icon"
-                >
+                <div key={icon} className="footer_social_icon">
                   {icon}
                 </div>
-
               ))}
-
             </div>
 
-            <p className="footer_hashtag">
-              #AtHomewithNorden
-            </p>
-
+            <p className="footer_hashtag">#AtHomewithNorden</p>
           </div>
 
           {/* LOGO */}
-
-          <div className="footer_logo">
-            NÓRDEN
-          </div>
-
+          <div className="footer_logo">NÓRDEN</div>
         </div>
-
       </div>
 
       {/* =========================
@@ -644,25 +543,20 @@ The language of space          </h4>
       ========================= */}
 
       <div className="footer_bottom">
-
         <div className="footer_legal">
-
-          {LEGAL.map((item) => (
-
-            <span key={item}>
-              {item}
-            </span>
-
-          ))}
-
+          {LEGAL.map((item) =>
+            item.href ? (
+              <Link key={item.label} href={item.href}>
+                {item.label}
+              </Link>
+            ) : (
+              <span key={item.label}>{item.label}</span>
+            )
+          )}
         </div>
 
-        <div>
-          © 2026 Norden. All rights reserved.
-        </div>
-
+        <div>© 2026 Norden. All rights reserved.</div>
       </div>
-
     </footer>
   );
 }
