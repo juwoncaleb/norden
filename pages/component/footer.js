@@ -340,7 +340,7 @@ export default function Footer() {
 
         {/* NEWSLETTER + SOCIAL + LOGO */}
         <div className="footer_col footer_newsletter">
-          <h4 className="footer_heading">Enjoy £50 off your first order</h4>
+          <h4 className="footer_heading">Enjoy 50 off your first order</h4>
 
           <div className="footer_email">
             <input
@@ -365,7 +365,7 @@ export default function Footer() {
             <p className="footer_hashtag">#AtHomewithNorden</p>
           </div>
 
-          <div className="footer_logo">MODO</div>
+          <div className="footer_logo">NÓRDEN</div>
         </div>
       </div>
 
