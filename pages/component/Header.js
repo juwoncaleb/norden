@@ -13,7 +13,6 @@ const MENU = [
   {
     label: "Headboard",
     items: [
-      { label: "Essential", href: "/essential" }, // TODO: no page yet
       { label: "Signature", href: "/signature" }, // needs pages/signature/index.js
       { label: "Custom", href: "/custom" }, // TODO: no page yet
     ],
