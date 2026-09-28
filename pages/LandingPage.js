@@ -1,8 +1,7 @@
 import React from "react";
 
-
 import FurnitureCarousel from "./component/furniture";
-import Header from './component/Header'
+import Header from "./component/Header";
 import Footer from "./component/footer";
 import FAQ from "./component/faq";
 import ImageCarousel from "./component/carousel";
@@ -10,7 +9,7 @@ import ImageCarousel from "./component/carousel";
 export default function LandingPage() {
   return (
     <div>
-<Header/>
+      <Header />
       {/* HERO SECTION (video) */}
       <section className="hero">
         <video className="video-bg" autoPlay loop muted playsInline>
@@ -40,22 +39,21 @@ export default function LandingPage() {
           <p>$1,500 min.spend</p>
         </div>
       </section>
+<div className="carousel_img">
+  {/* TEXTS */}
+  <div className="image__text">
+    <p className="img_txt">
+      From unexpected plus-ones to evenings that don’t go according to
+      plan, these are the pieces that hold everyday chaos together so you
+      can stay exactly where you want to be: in the moment.
+    </p>
+    <button className="selling">Explore the collection</button>
+  </div>
 
-      <div className="flex carousel_img justify-center gap-14">
-        {/* TEXTS */}
-        <div className="image__text">
-          <p className="img_txt">
-            From unexpected plus-ones to evenings that don’t go according to
-            plan, these are the pieces that hold everyday chaos together so you
-            can stay exactly where you want to be: in the moment.
-          </p>
-          <button className="selling">Explore the collection</button>
-        </div>
-
-        <div>
-        <ImageCarousel/>
-        </div>
-      </div>
+  <div className="carousel_wrap">
+    <ImageCarousel />
+  </div>
+</div>
 
       <div className="bestselling">
         <center>
@@ -68,8 +66,8 @@ export default function LandingPage() {
         </center>
       </div>
 
-<FurnitureCarousel/>
-    <section
+      <FurnitureCarousel />
+      <section
         className="background_div h-screen bg-cover bg-center flex items-center justify-center relative"
         style={{ backgroundImage: "url('/bg.jpg')" }}
       >
@@ -86,9 +84,9 @@ export default function LandingPage() {
           </button>
         </div>
       </section>
-      <FAQ/>
-    
-      <Footer/>
+      <FAQ />
+
+      <Footer />
     </div>
   );
 }

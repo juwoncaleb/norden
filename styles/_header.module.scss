@@ -1,39 +1,434 @@
 @import url("https://fonts.googleapis.com/css2?family=Radley:ital@0;1&display=swap");
+
+$cream: #f6f3e7;
+$cream-light: #fbf9f4;
+$burgundy: #65000b;
+
+// Below this width the header switches to the hamburger menu
+$bp-nav: 1100px;
+$bp-phone: 600px;
+
+@mixin nav-mobile {
+  @media (max-width: $bp-nav) {
+    @content;
+  }
+}
+@mixin phone {
+  @media (max-width: $bp-phone) {
+    @content;
+  }
+}
+
 .modo_logo {
   height: 35px;
 }
+
+/* ---------- HEADER BAR ---------- */
 .header_div {
   font-family: "Radley", serif;
+  background-color: $cream;
+  padding: 30px 2%;
+  display: flex;
+  justify-content: space-around;
+  // lifts the header (and its dropdowns) above the hero video and overlay
+  position: relative;
+  z-index: 100;
 
-  background-color: #f6f3e7;
-  padding-left: 2%;
-  padding-right: 2%;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  @include nav-mobile {
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 5%;
+  }
 }
+
+.header_left {
+  display: flex;
+}
+
+.logo_link {
+  display: block;
+}
+
+/* ---------- DESKTOP NAV ---------- */
+.desktop_nav {
+  display: flex;
+
+  @include nav-mobile {
+    display: none;
+  }
+}
+
+.nav_link,
+.nav_item {
+  margin: 8px 24px 0;
+
+  @media (max-width: 1280px) {
+    margin: 8px 16px 0;
+  }
+}
+
+.nav_link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $burgundy;
+  }
+}
+
+.nav_item {
+  position: relative;
+}
+
+.nav_trigger {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: $burgundy;
+  }
+}
+
+.nav_trigger:focus-visible,
+.nav_link:focus-visible {
+  outline: 2px solid $burgundy;
+  outline-offset: 4px;
+}
+
+.dropdown_panel {
+  position: absolute;
+  top: calc(100% + 24px);
+  left: 0;
+  z-index: 200;
+  min-width: 230px;
+  margin: 0;
+  padding: 14px 0;
+  list-style: none;
+  background-color: $cream-light;
+  border: 1px solid rgba($burgundy, 0.15);
+  border-top: 2px solid $burgundy;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+  animation: dropdown_in 160ms ease-out;
+
+  // invisible bridge so the cursor can cross the gap without closing it
+  &::before {
+    content: "";
+    position: absolute;
+    top: -26px;
+    left: 0;
+    right: 0;
+    height: 26px;
+  }
+}
+
+.dropdown_link {
+  display: block;
+  padding: 9px 26px;
+  font-family: "Radley", serif;
+  font-size: 17px;
+  color: #111;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease,
+    padding-left 0.15s ease;
+
+  &:hover {
+    color: $burgundy;
+    background-color: $cream;
+    padding-left: 32px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $burgundy;
+    outline-offset: -2px;
+  }
+}
+
+.desktop_actions {
+  @include nav-mobile {
+    display: none;
+  }
+}
+
+/* ---------- HAMBURGER ---------- */
+.mobile_toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: #111;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $burgundy;
+    outline-offset: 2px;
+  }
+
+  @include nav-mobile {
+    display: flex;
+  }
+}
+
+/* ---------- MOBILE DRAWER ---------- */
+.drawer_backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s ease, visibility 0s 0.28s;
+
+  &.is_open {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+
+.mobile_drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 400;
+  width: min(88vw, 380px);
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: $cream;
+  font-family: "Radley", serif;
+  transform: translateX(-100%);
+  // visibility keeps the closed drawer out of the tab order
+  visibility: hidden;
+  transition: transform 0.28s ease, visibility 0s 0.28s;
+
+  &.is_open {
+    transform: translateX(0);
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  // the drawer only exists on small screens
+  @media (min-width: ($bp-nav + 1)) {
+    display: none;
+  }
+
+  .contact_us_button {
+    position: static;
+    width: 100%;
+  }
+}
+
+.drawer_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba($burgundy, 0.15);
+}
+
+.drawer_close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  color: #111;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid $burgundy;
+    outline-offset: 2px;
+  }
+}
+
+.drawer_nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.drawer_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 24px;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid rgba($burgundy, 0.1);
+  font: inherit;
+  font-size: 19px;
+  color: #111;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: $burgundy;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $burgundy;
+    outline-offset: -2px;
+  }
+}
+
+.chevron {
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+
+  &.is_open {
+    transform: rotate(-135deg);
+  }
+}
+
+.drawer_sub {
+  background-color: $cream-light;
+  padding: 6px 0;
+
+  a {
+    display: block;
+    padding: 12px 24px 12px 40px;
+    font-size: 17px;
+    color: #111;
+    text-decoration: none;
+
+    &:hover {
+      color: $burgundy;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $burgundy;
+      outline-offset: -2px;
+    }
+  }
+}
+
+.drawer_footer {
+  padding: 20px 24px calc(20px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba($burgundy, 0.15);
+}
+
+@keyframes dropdown_in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown_panel {
+    animation: none;
+  }
+  .dropdown_link,
+  .chevron,
+  .mobile_drawer,
+  .drawer_backdrop {
+    transition: none;
+  }
+}
+
+/* ---------- EXISTING HEADER STYLES ---------- */
+.contact_us_button {
+  height: 40px;
+  width: 150px;
+  color: white;
+  background-color: black;
+  position: relative;
+  bottom: 10px;
+}
+
 .header_icon {
   height: 20px;
   margin-left: 7px;
   margin-right: 7px;
 }
+
 .offer_div {
-  background-color: #fbf9f4;
+  background-color: $cream-light;
   padding-top: 10px;
   padding-bottom: 10px;
+
+  @include phone {
+    flex-wrap: wrap;
+    row-gap: 4px;
+    padding: 8px 12px;
+  }
 }
+
 .offer_text {
   margin-left: 50px;
   margin-right: 50px;
+
+  @include nav-mobile {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+
+  @include phone {
+    margin-left: 12px;
+    margin-right: 12px;
+
+    img {
+      width: 22px;
+      height: auto;
+    }
+  }
 }
+
 .offer_text_arrow {
   margin-top: 5px;
   margin-right: 20px;
   font-family: "Radley", serif;
   font-size: 18px;
   font-weight: 400;
-  color: #65000B;
+  color: $burgundy;
+
+  @include phone {
+    margin-top: 0;
+    margin-right: 6px;
+    font-size: 14px;
+  }
 }
-/* HERO SECTION */
+
+/* ---------- HERO SECTION ---------- */
 .hero {
   position: relative;
   width: 100%;
@@ -74,35 +469,44 @@
   color: white;
   text-align: center;
   padding: 0 20px;
+  font-family: "Radley", serif;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+
+    @include phone {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+
+    @include phone {
+      font-size: 1rem;
+    }
+  }
 }
 
-.hero-content h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-}
-
-/* NORMAL PAGE CONTENT */
+/* ---------- NORMAL PAGE CONTENT ---------- */
 .content-section {
   padding: 80px 20px;
   background: #fff;
   color: #111;
   text-align: center;
+
+  &:nth-child(even) {
+    background: #f5f5f5;
+  }
+
+  @include phone {
+    padding: 48px 16px;
+  }
 }
 
-.content-section:nth-child(even) {
-  background: #f5f5f5;
-}
-.hero-content{
-    font-family: "Radley", serif;
-
-}
-
-.seebtn{
-  background-color: #65000B ;
+.seebtn {
+  background-color: $burgundy;
   width: 120px;
   height: 40px;
   font-size: 18px;
