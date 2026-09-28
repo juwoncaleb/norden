@@ -20,7 +20,7 @@ export default function LandingPage() {
         <div className="overlay"></div>
 
         <div className="hero-content">
-          <h1>All you need to create a Home​</h1>
+          <h1>The language of Space - Norden ​</h1>
           <Link href="./sofa">
             <button className="seebtn">See More</button>
           </Link>
