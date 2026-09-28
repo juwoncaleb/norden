@@ -5,7 +5,7 @@ import Link from "next/link";
 // Items marked TODO don't have a page yet.
 const NAV_LINKS = [
   { label: "Our Story", href: "/about" },
-  { label: "Blogs", href: "/blog" },
+  // { label: "Blogs", href: "/blog" },
   { label: "Delivery", href: "/delivery" }, // TODO: no page yet
 ];
 
@@ -140,9 +140,10 @@ export default function Header() {
   const logo = (
     <img
       className="modo_logo mt-1 mr-8"
-      src="https://ik.imagekit.io/MM/modo.png"
+      src="./norden.png"
       alt="Logo"
     />
+    
   );
 
   return (
