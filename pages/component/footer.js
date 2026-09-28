@@ -33,10 +33,11 @@ const COLUMNS = [
   },
   {
     title: "About Us",
+    
     links: [
       { label: "Our Story", href: "/about" },
       { label: "Delivery", href: "/delivery" },
-      { label: "Contact Us", href: "/contact" },
+      { label: "Contact Us", href: "https://wa.me/2348030486766" },
       { label: "TC", href: "/custom" },
     ],
   },

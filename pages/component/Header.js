@@ -240,11 +240,7 @@ export default function Header() {
       >
         <div className="drawer_top">
           <Link href="/" onClick={closeDrawer}>
-            <img
-              className="modo_logo"
-              src="/norden.png"
-              alt="Logo"
-            />
+            <img className="modo_logo" src="/norden.png" alt="Logo" />
           </Link>
           <button
             type="button"
@@ -316,12 +312,19 @@ export default function Header() {
         </nav>
 
         <div className="drawer_footer">
-<button
-  className="contact_us_button"
-  onClick={() => window.open("https://wa.me/2348030486766", "_blank", "noopener,noreferrer")}
->
-  Contact Us
-</button>        </div>
+          <button
+            className="contact_us_button"
+            onClick={() =>
+              window.open(
+                "https://wa.me/2348030486766",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+          >
+            Contact Us
+          </button>{" "}
+        </div>
       </aside>
 
       <div className="offer_div flex justify-center">
