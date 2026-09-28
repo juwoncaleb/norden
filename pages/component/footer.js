@@ -51,7 +51,7 @@ const LEGAL = [
   "Privacy",
   "Terms",
   "Promo Terms*",
-  "The Castlery Club Terms",
+  "The Norden Club Terms",
   "Sitemap",
   "Accessibility Statement",
   "Cookies",
@@ -362,7 +362,7 @@ export default function Footer() {
                 </div>
               ))}
             </div>
-            <p className="footer_hashtag">#AtHomewithCastlery</p>
+            <p className="footer_hashtag">#AtHomewithNorden</p>
           </div>
 
           <div className="footer_logo">MODO</div>
@@ -376,7 +376,7 @@ export default function Footer() {
             <span key={item}>{item}</span>
           ))}
         </div>
-        <div>© 2026 Castlery. All rights reserved.</div>
+        <div>© 2026 Norden. All rights reserved.</div>
       </div>
     </footer>
   );
