@@ -11,12 +11,13 @@ const NAV_LINKS = [
 
 const MENU = [
   {
-    label: "Headboard",
-    items: [
-      { label: "Signature", href: "/signature" }, // needs pages/signature/index.js
-      { label: "Custom", href: "/custom" }, // TODO: no page yet
-    ],
-  },
+  label: "Headboard",
+  items: [
+    { label: "Headboard", href: "/headboard" },
+    { label: "Signature", href: "/signature" }, // needs pages/signature/index.js
+    { label: "Custom", href: "/custom" }, // TODO: no page yet
+  ],
+},
   {
     label: "Bedroom",
     items: [
