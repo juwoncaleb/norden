@@ -37,13 +37,10 @@ export async function getServerSideProps() {
 }
 
 function formatPrice(value) {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "NGN",
+  return "₦" + new Intl.NumberFormat("en-NG", {
     maximumFractionDigits: 0,
   }).format(value);
 }
-
 export default function MirrorsListPage({ items }) {
   return (
     <div>
