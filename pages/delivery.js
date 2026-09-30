@@ -2,7 +2,6 @@ import React from "react";
 
 import Header from "./component/Header";
 import Footer from "./component/footer";
-import PricingSection from "./component/deliveryprice";
 
 export default function delivery() {
   return (
@@ -51,7 +50,6 @@ export default function delivery() {
 
       
       </div>
-      <PricingSection/>
 
       <Footer />
     </div>
