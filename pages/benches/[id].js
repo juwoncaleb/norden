@@ -22,13 +22,10 @@ export async function getServerSideProps({ params }) {
 }
 
 function formatPrice(value) {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "NGN",
+  return "₦" + new Intl.NumberFormat("en-NG", {
     maximumFractionDigits: 0,
   }).format(value);
 }
-
 function imageUrl(image, width) {
   const url = image?.fields?.file?.url;
   if (!url) return null;
