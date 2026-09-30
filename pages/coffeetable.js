@@ -20,8 +20,6 @@ export async function getServerSideProps() {
 
   while (skip < total) {
     const response = await client.getEntries({
-      // Double-check this matches the content type's actual API ID
-      // in Contentful (Content model page, not just the display name).
       content_type: "coffeeTable",
       limit: pageSize,
       skip,
@@ -33,13 +31,13 @@ export async function getServerSideProps() {
     skip += pageSize;
   }
 
-  return { props: { items } };
+  return { props: { items: JSON.parse(JSON.stringify(items)) } };
 }
 
 function formatPrice(value) {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: "GBP",
+    currency: "NGN",
     maximumFractionDigits: 0,
   }).format(value);
 }
@@ -66,8 +64,6 @@ export default function CoffeeTableListPage({ items }) {
                 item.discountedPrice != null &&
                 item.discountedPrice < item.price;
 
-              // "tags" may be a single Short Text field rather than a
-              // list, so it can come back as a comma-separated string.
               const tagList = Array.isArray(item.tags)
                 ? item.tags
                 : item.tags
@@ -77,7 +73,7 @@ export default function CoffeeTableListPage({ items }) {
               return (
                 <Link
                   key={entry.sys.id}
-                  href={`/coffee-table/${entry.sys.id}`}
+                  href={`/coffeetable/${entry.sys.id}`}
                   className="block"
                 >
                   <div className="group cursor-pointer">

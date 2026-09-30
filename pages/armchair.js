@@ -39,7 +39,7 @@ export async function getServerSideProps() {
 function formatPrice(value) {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: "GBP",
+    currency: "NGN",
     maximumFractionDigits: 0,
   }).format(value);
 }
