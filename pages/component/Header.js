@@ -11,13 +11,13 @@ const NAV_LINKS = [
 
 const MENU = [
   {
-  label: "Headboard",
-  items: [
-    { label: "Headboard", href: "/headboard" },
-    { label: "Signature", href: "/signature" }, // needs pages/signature/index.js
-    { label: "Custom", href: "/custom" }, // TODO: no page yet
-  ],
-},
+    label: "Headboard",
+    items: [
+      { label: "Headboard", href: "/headboard" },
+      { label: "Signature", href: "/signature" }, // needs pages/signature/index.js
+      { label: "Custom", href: "/custom" }, // TODO: no page yet
+    ],
+  },
   {
     label: "Bedroom",
     items: [
@@ -137,8 +137,9 @@ export default function Header() {
     closeTimer.current = setTimeout(() => setOpen(null), 120);
   };
 
+  // Leading slash = always loads from /public, on every page
   const logo = (
-    <img className="modo_logo mt-1 mr-8" src="./norden.png" alt="Logo" />
+    <img className="modo_logo mt-1 mr-8" src="/norden.png" alt="Logo" />
   );
 
   return (
