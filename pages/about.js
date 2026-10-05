@@ -60,7 +60,7 @@ export default function About() {
       <div className="flex flex-col md:flex-row w-full md:h-screen">
         <div className="order-2 md:order-1 w-full md:w-1/2 md:h-full flex items-center justify-center px-6 py-12 md:px-10 md:py-0">
           <div className="max-w-md abt_2 text-white text-center">
-            <p className="crafted mb-4">Nórden Atelier</p>
+            <p className="crafted mb-4">Nórden Studio </p>
             <p className="text-base md:text-lg leading-relaxed">
               Every space communicates. Through proportion, material, light,
               texture and form, it can create calm, invite conversation,

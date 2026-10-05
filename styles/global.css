@@ -480,6 +480,12 @@
   font-size: 18px;
 }
 
+/* 4. Add to .footer_social_icon in the CSS string so the link looks identical */
+.footer_social_icon {
+  color: inherit;
+  text-decoration: none;
+}
+
 .lop {
   height: 100px;
 }
@@ -759,6 +765,11 @@
 }
 /* Variables and mixins are repeated here so this file works on its own.
    If you merge it into header.scss, the duplicates are harmless. */
+.delivery_div {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
 .main_div {
   background-color: rebeccapurple;
 }

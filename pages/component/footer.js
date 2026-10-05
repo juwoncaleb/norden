@@ -33,17 +33,20 @@ const COLUMNS = [
   },
   {
     title: "About Us",
-    
     links: [
       { label: "Our Story", href: "/about" },
       { label: "Delivery", href: "/delivery" },
-      { label: "Contact Us", href: "https://wa.me/2348030486766" },
+      { label: "Contact Us", href: "https://wa.me/2348068520499" },
       { label: "TC", href: "/custom" },
     ],
   },
 ];
 
-const SOCIAL = ["f", "p", "ig"];
+const SOCIAL = [
+  { label: "f", name: "Facebook" },
+  { label: "p", name: "Pinterest" },
+  { label: "ig", name: "Instagram", href: "https://instagram.com/norden.hq" },
+];
 
 const LEGAL = [
   { label: "Privacy" },
@@ -56,6 +59,8 @@ const LEGAL = [
 ];
 
 const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+const isExternal = (href) => /^https?:\/\//.test(href);
 
 const CSS = `
 .site_footer,
@@ -249,6 +254,9 @@ const CSS = `
 
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 50%;
+
+  color: inherit;
+  text-decoration: none;
 
   font-size: 12px;
 
@@ -492,7 +500,17 @@ export default function Footer() {
               >
                 {column.links.map((item) => (
                   <li key={item.label} className="footer_link">
-                    <Link href={item.href}>{item.label}</Link>
+                    {isExternal(item.href) ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link href={item.href}>{item.label}</Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -524,11 +542,28 @@ export default function Footer() {
             <h4 className="footer_heading">Social</h4>
 
             <div className="footer_social">
-              {SOCIAL.map((icon) => (
-                <div key={icon} className="footer_social_icon">
-                  {icon}
-                </div>
-              ))}
+              {SOCIAL.map((icon) =>
+                icon.href ? (
+                  <a
+                    key={icon.label}
+                    href={icon.href}
+                    className="footer_social_icon"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={icon.name}
+                  >
+                    {icon.label}
+                  </a>
+                ) : (
+                  <div
+                    key={icon.label}
+                    className="footer_social_icon"
+                    aria-label={icon.name}
+                  >
+                    {icon.label}
+                  </div>
+                )
+              )}
             </div>
 
             <p className="footer_hashtag">#AtHomewithNorden</p>
