@@ -591,6 +591,8 @@ export default function Footer() {
           )}
         </div>
 
+        
+
         <div>© 2026 Norden. All rights reserved.</div>
       </div>
     </footer>
