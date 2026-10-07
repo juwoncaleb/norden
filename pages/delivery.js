@@ -40,7 +40,7 @@ export default function Delivery() {
             It is your responsibility to confirm that your items will fit
             through doors, staircases and elevators in their packaging before
             you order. Product and package dimensions are included in each
-            product description. If we ca not access your home at the time of
+            product description. If we canot access your home at the time of
             delivery, additional charges will apply. If your order is shipped to
             a freight forwarder, Norden is not responsible for any issues that
             arise once the shipment is in their hands.
