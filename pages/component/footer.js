@@ -37,7 +37,7 @@ const COLUMNS = [
       { label: "Our Story", href: "/about" },
       { label: "Delivery", href: "/delivery" },
       { label: "Contact Us", href: "https://wa.me/2348068520499" },
-      { label: "TC", href: "/custom" },
+      { label: "TC", href: "/tc" },
     ],
   },
 ];
@@ -590,8 +590,6 @@ export default function Footer() {
             )
           )}
         </div>
-
-        
 
         <div>© 2026 Norden. All rights reserved.</div>
       </div>
