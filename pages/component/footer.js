@@ -43,7 +43,7 @@ const COLUMNS = [
 ];
 
 const SOCIAL = [
-  { label: "f", name: "Facebook" },
+  { label: "f", name: "Facebook" , href:"https://web.facebook.com/profile.php?id=100080173489561&sk=followers" },
   { label: "p", name: "Pinterest" },
   { label: "ig", name: "Instagram", href: "https://instagram.com/norden.hq" },
 ];
