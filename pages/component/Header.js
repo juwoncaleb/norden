@@ -204,7 +204,7 @@ export default function Header() {
             className="contact_us_button"
             onClick={() =>
               window.open(
-                "https://wa.me/2348030486766",
+                "https://wa.me/2348068520499",
                 "_blank",
                 "noopener,noreferrer",
               )
