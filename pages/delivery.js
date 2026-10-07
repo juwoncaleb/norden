@@ -28,19 +28,19 @@ export default function Delivery() {
             Speed of delivery depends on the type of product, its availability,
             and proximity to metropolitan areas. Lead times are listed on each
             product page, where you can also enter your zip code to check
-            whether we deliver to your area. If your area isn't covered yet,
+            whether we deliver to your area. If your area is not covered yet,
             subscribe to our newsletter or follow us on social media for
             updates. Shipments are delivered Monday to Friday, 9:00 am to 7:00
             pm, with limited hours on Saturdays in selected cities. To request a
             Saturday delivery, contact us before your order is processed, though
-            we can't guarantee every request.
+            we ca not guarantee every request.
           </p>
 
           <p className="mb-6">
             It is your responsibility to confirm that your items will fit
             through doors, staircases and elevators in their packaging before
             you order. Product and package dimensions are included in each
-            product description. If we can't access your home at the time of
+            product description. If we ca not access your home at the time of
             delivery, additional charges will apply. If your order is shipped to
             a freight forwarder, Norden is not responsible for any issues that
             arise once the shipment is in their hands.

@@ -329,26 +329,7 @@ export default function Header() {
         </div>
       </aside>
 
-      <div className="offer_div flex justify-center">
-        <div className="flex offer_text">
-          <p className="offer_text_arrow">NEW ARRIVALS</p>
-          <img
-            width="34"
-            height="64"
-            src="https://img.icons8.com/laces/64/arrow.png"
-            alt="arrow"
-          />
-        </div>
-        <div className="flex offer_text">
-          <p className="offer_text_arrow"> UP TO 40% OFF SALE</p>
-          <img
-            width="34"
-            height="64"
-            src="https://img.icons8.com/laces/64/arrow.png"
-            alt="arrow"
-          />
-        </div>
-      </div>
+    
     </div>
   );
 }

@@ -1,13 +1,16 @@
 import React from "react";
-
 import FurnitureCarousel from "./component/furniture";
+
+
 import Header from "./component/Header";
 import Footer from "./component/footer";
 import FAQ from "./component/faq";
 import ImageCarousel from "./component/carousel";
 import Link from "next/link";
 
-export default function LandingPage() {
+
+
+export default function LandingPage({entries}) {
   return (
     <div>
       <Header />
@@ -67,11 +70,15 @@ export default function LandingPage() {
             Thoughtfully made by people who live in homes, too. That’s why you
             love them so much.
           </p>
+          <Link href="./sofa">
           <button className="view_all">View all</button>
+
+          </Link>
         </center>
       </div>
 
-      <FurnitureCarousel />
+
+
       <section
         className="background_div h-screen bg-cover bg-center flex items-center justify-center relative"
         style={{ backgroundImage: "url('/bg.jpg')" }}
@@ -91,6 +98,8 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
+            <FurnitureCarousel entries={entries} title="Bestsellers" />
+      
       <FAQ />
 
       <Footer />
