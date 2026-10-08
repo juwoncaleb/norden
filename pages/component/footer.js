@@ -525,7 +525,7 @@ export default function Footer() {
         <div className="footer_col footer_newsletter">
           <h4 className="footer_heading">The language of space</h4>
 
-          <div className="footer_email">
+          {/* <div className="footer_email">
             <input
               type="email"
               aria-label="Email address"
@@ -535,7 +535,7 @@ export default function Footer() {
             <button type="button" aria-label="Subscribe">
               →
             </button>
-          </div>
+          </div> */}
 
           {/* SOCIAL */}
           <div className="footer_social_block">
