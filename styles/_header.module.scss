@@ -511,3 +511,55 @@ $bp-phone: 600px;
   height: 40px;
   font-size: 18px;
 }
+
+/* ---------- PAGE LOADING SPINNER ---------- */
+.page_loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($cream, 0.75);
+  backdrop-filter: blur(2px);
+  animation: loader_in 0.2s ease-out;
+}
+
+.page_loader_spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba($burgundy, 0.2);
+  border-top-color: $burgundy;
+  border-radius: 50%;
+  animation: loader_spin 0.8s linear infinite;
+}
+
+.sr_only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@keyframes loader_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page_loader_spinner {
+    animation-duration: 2s;
+  }
+}
