@@ -74,7 +74,7 @@ export default function BedsideTableListPage({ items }) {
               return (
                 <Link
                   key={entry.sys.id}
-                  href={`/bedside-table/${entry.sys.id}`}
+                  href={`/bedsidetable/${entry.sys.id}`}
                   className="block"
                 >
                   <div className="group cursor-pointer">

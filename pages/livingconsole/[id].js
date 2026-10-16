@@ -2,6 +2,8 @@ import { useState } from "react";
 import { createClient } from "contentful";
 import Header from "../component/Header";
 import Footer from "../component/footer";
+import CartDrawer from "../component/CartDrawer";
+import { useCartStore } from "../../store/cartStore"; // adjust path to your folder depth
 
 // Requires these in your .env.local:
 // CONTENTFUL_SPACE_ID=xxxx
@@ -37,6 +39,10 @@ export default function LivingConsoleDetailPage({ item }) {
   const [zoom, setZoom] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
+  // Cart (hooks must stay above the early return below)
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
+
   if (!item) {
     return (
       <div>
@@ -62,6 +68,16 @@ export default function LivingConsoleDetailPage({ item }) {
 
   const hasDiscount =
     fields.discountedPrice != null && fields.discountedPrice < fields.price;
+
+  const handleAddToCart = () => {
+    addItem({
+      id: item.sys.id,
+      title: fields.title,
+      price: hasDiscount ? fields.discountedPrice : fields.price,
+      image: imageUrl(images[0], 400),
+    });
+    openCart(); // slides the cart drawer in from the right
+  };
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -155,9 +171,19 @@ export default function LivingConsoleDetailPage({ item }) {
               </span>
             </div>
           </div>
+
+          {/* ADD TO CART */}
+          <button
+            className="sd-add-btn"
+            onClick={handleAddToCart}
+            disabled={!fields.inStock}
+          >
+            {fields.inStock ? "Add to Cart" : "Out of Stock"}
+          </button>
         </div>
       </div>
 
+      <CartDrawer />
       <Footer />
     </div>
   );
