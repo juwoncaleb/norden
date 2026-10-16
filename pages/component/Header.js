@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 // Every href matches a file in /pages (pages/beds.js -> "/beds").
 // Items marked TODO don't have a page yet.
@@ -9,9 +10,6 @@ const NAV_LINKS = [
   { label: "Delivery", href: "/delivery" }, // TODO: no page yet
 ];
 
-  const handleCheckout = () => {
-    router.push("/checkout");
-  };
 const MENU = [
   {
     label: "Headboard",
@@ -83,6 +81,8 @@ const slugify = (s) =>
     .replace(/(^-|-$)/g, "");
 
 export default function Header() {
+  const router = useRouter();
+
   const [open, setOpen] = useState(null); // desktop dropdown
   const [drawerOpen, setDrawerOpen] = useState(false); // mobile drawer
   const [accordion, setAccordion] = useState(null); // mobile section
@@ -94,6 +94,11 @@ export default function Header() {
     setDrawerOpen(false);
     setAccordion(null);
   }, []);
+
+  const handleCheckout = () => {
+    closeDrawer();
+    router.push("/checkout");
+  };
 
   // Desktop: close on outside click. Everywhere: close on Escape.
   useEffect(() => {
@@ -202,14 +207,15 @@ export default function Header() {
           </nav>
         </div>
 
-        {/* DESKTOP CONTACT */}
+        {/* DESKTOP CHECKOUT */}
         <div className="desktop_actions flex mt-2">
           <button
+            type="button"
             className="contact_us_button"
-           onClick={handleCheckout}
+            onClick={handleCheckout}
           >
-            Checkout{" "}
-          </button>{" "}
+            Checkout
+          </button>
         </div>
 
         {/* HAMBURGER (mobile only) */}
@@ -313,12 +319,12 @@ export default function Header() {
 
         <div className="drawer_footer">
           <button
+            type="button"
             className="contact_us_button"
-          onClick={handleCheckout}
-            
+            onClick={handleCheckout}
           >
-            Checkout{" "}
-          </button>{" "}
+            Checkout
+          </button>
         </div>
       </aside>
     </div>
