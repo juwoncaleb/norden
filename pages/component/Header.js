@@ -86,9 +86,11 @@ export default function Header() {
   const [open, setOpen] = useState(null); // desktop dropdown
   const [drawerOpen, setDrawerOpen] = useState(false); // mobile drawer
   const [accordion, setAccordion] = useState(null); // mobile section
+  const [loading, setLoading] = useState(false); // page-change spinner
   const navRef = useRef(null);
   const closeBtnRef = useRef(null);
   const closeTimer = useRef(null);
+  const spinnerTimer = useRef(null);
 
   const closeDrawer = useCallback(() => {
     setDrawerOpen(false);
@@ -99,6 +101,39 @@ export default function Header() {
     closeDrawer();
     router.push("/checkout");
   };
+
+  // Show a spinner while the next page is loading its data.
+  // It only appears after 150ms, so instant navigations don't flash it.
+  useEffect(() => {
+    const onStart = (url, { shallow } = {}) => {
+      if (shallow) return;
+      // Ignore clicks on the page you're already on
+      if (url.split("?")[0] === router.asPath.split("?")[0]) return;
+
+      clearTimeout(spinnerTimer.current);
+      spinnerTimer.current = setTimeout(() => setLoading(true), 150);
+
+      // Close menus so the spinner is clearly visible
+      setOpen(null);
+      closeDrawer();
+    };
+
+    const onEnd = () => {
+      clearTimeout(spinnerTimer.current);
+      setLoading(false);
+    };
+
+    router.events.on("routeChangeStart", onStart);
+    router.events.on("routeChangeComplete", onEnd);
+    router.events.on("routeChangeError", onEnd);
+
+    return () => {
+      clearTimeout(spinnerTimer.current);
+      router.events.off("routeChangeStart", onStart);
+      router.events.off("routeChangeComplete", onEnd);
+      router.events.off("routeChangeError", onEnd);
+    };
+  }, [router, closeDrawer]);
 
   // Desktop: close on outside click. Everywhere: close on Escape.
   useEffect(() => {
@@ -153,6 +188,14 @@ export default function Header() {
 
   return (
     <div>
+      {/* PAGE LOADING SPINNER */}
+      {loading && (
+        <div className="page_loader" role="status" aria-live="polite">
+          <div className="page_loader_spinner" />
+          <span className="sr_only">Loading</span>
+        </div>
+      )}
+
       <div className="header_div">
         <div className="header_left">
           <Link href="/" className="logo_link">
