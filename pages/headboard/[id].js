@@ -1,9 +1,11 @@
 import { createClient } from "contentful";
 import Header from "../component/Header";
 import Footer from "../component/footer";
+import CartDrawer from "../component/CartDrawer";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useCartStore } from "../../store/cartStore"; // adjust path to your folder depth
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
@@ -29,6 +31,10 @@ export default function HeadboardDetailPage({ entry }) {
   const item = entry.fields;
   const [active, setActive] = useState(0);
 
+  // Cart
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
+
   const imageUrls = (item.images || [])
     .map((img) => img?.fields?.file?.url)
     .filter(Boolean)
@@ -42,6 +48,16 @@ export default function HeadboardDetailPage({ entry }) {
     : item.tags
     ? item.tags.split(",").map((t) => t.trim()).filter(Boolean)
     : [];
+
+  const handleAddToCart = () => {
+    addItem({
+      id: entry.sys.id,
+      title: item.title,
+      price: hasDiscount ? item.discountedPrice : item.price,
+      image: imageUrls[0] ? `${imageUrls[0]}?w=400` : null,
+    });
+    openCart(); // slides the cart drawer in from the right
+  };
 
   return (
     <div>
@@ -140,10 +156,20 @@ export default function HeadboardDetailPage({ entry }) {
                 ))}
               </ul>
             )}
+
+            {/* ADD TO CART */}
+            <button
+              className="sd-add-btn"
+              onClick={handleAddToCart}
+              disabled={!item.inStock}
+            >
+              {item.inStock ? "Add to Cart" : "Out of Stock"}
+            </button>
           </div>
         </div>
       </main>
 
+      <CartDrawer />
       <Footer />
     </div>
   );

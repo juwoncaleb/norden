@@ -9,6 +9,9 @@ const NAV_LINKS = [
   { label: "Delivery", href: "/delivery" }, // TODO: no page yet
 ];
 
+  const handleCheckout = () => {
+    router.push("/checkout");
+  };
 const MENU = [
   {
     label: "Headboard",
@@ -22,6 +25,7 @@ const MENU = [
     label: "Bedroom",
     items: [
       { label: "Beds", href: "/beds" },
+      { label: "Bar", href: "/bar" },
       { label: "Bedside Table", href: "/bedsidetable" },
       { label: "Benches", href: "/benches" },
       { label: "Dressers", href: "/dresser" },
@@ -202,15 +206,9 @@ export default function Header() {
         <div className="desktop_actions flex mt-2">
           <button
             className="contact_us_button"
-            onClick={() =>
-              window.open(
-                "https://wa.me/2348068520499",
-                "_blank",
-                "noopener,noreferrer",
-              )
-            }
+           onClick={handleCheckout}
           >
-            Contact Us
+            Checkout{" "}
           </button>{" "}
         </div>
 
@@ -316,20 +314,13 @@ export default function Header() {
         <div className="drawer_footer">
           <button
             className="contact_us_button"
-            onClick={() =>
-              window.open(
-                "https://wa.me/2348030486766",
-                "_blank",
-                "noopener,noreferrer",
-              )
-            }
+          onClick={handleCheckout}
+            
           >
-            Contact Us
+            Checkout{" "}
           </button>{" "}
         </div>
       </aside>
-
-    
     </div>
   );
 }
