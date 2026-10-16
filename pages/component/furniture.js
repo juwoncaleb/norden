@@ -147,16 +147,6 @@ export default function FurnitureCarousel({ entries = [], title = "Bestsellers" 
                     onError={(e) => { e.target.style.display = "none"; }}
                     style={{ maxWidth: "72%", maxHeight: "72%", objectFit: "contain", pointerEvents: "none" }}
                   />
-
-                  <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 8 }}>
-                    {["🛒", "♡"].map((icon, i) => (
-                      <button key={i} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} style={{
-                        width: 36, height: 36, borderRadius: "50%", border: "1px solid #c9bfb0",
-                        background: "rgba(245,240,232,0.85)", backdropFilter: "blur(4px)",
-                        cursor: "pointer", fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center",
-                      }}>{icon}</button>
-                    ))}
-                  </div>
                 </div>
 
                 <p style={{ margin: "0 0 4px", fontSize: 15, fontWeight: 500, color: "#2c1f0e", lineHeight: 1.3 }}>{item.name}</p>
