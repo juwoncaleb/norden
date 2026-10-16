@@ -63,7 +63,7 @@ export default function LandingPage({entries}) {
         </div>
       </div>
 
-      <div className="bestselling">
+    <div className="bestselling">
         <center>
           <p className="modo_shop">Shop the look with NORDEN</p>
           <p className="modo_text">
