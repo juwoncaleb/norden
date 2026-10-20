@@ -59,7 +59,7 @@ export default function AmbassadorPage() {
 
           <p>
             We are looking for creators to spotlight our furniture to their
-            dedicated followers. If you're a modern millennial passionate
+            dedicated followers. If you are a modern millennial passionate
             about pursuing the goals and milestones that matter to you and
             have a keen eye for aesthetics, we want to work with you!
           </p>
