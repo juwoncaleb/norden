@@ -3,9 +3,9 @@ import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, INLINES, MARKS } from "@contentful/rich-text-types";
 
-import Header from "../../component/Header";
-import Footer from "../../component/footer";
 import { getJobById } from "@/lib/contentful";
+import Header from "../component/Header";
+import Footer from "../component/footer";
 
 // Custom Render Options to match Contentful styling exactly
 const renderOptions = {
@@ -134,10 +134,10 @@ export default function CareerDetails({ job }) {
         />
       </Head>
 
-      <Header />
 
       <main className="careers-page mx-auto min-h-screen max-w-5xl px-4 py-10 sm:px-6 sm:py-16">
         {/* Back link */}
+        <Header/>
         <Link
           href="/career"
           className="mb-8 inline-block text-sm font-medium text-gray-600 transition hover:text-black"
@@ -255,9 +255,9 @@ export default function CareerDetails({ job }) {
             Apply Now
           </a>
         </section>
+        <Footer/>
       </main>
 
-      <Footer />
     </>
   );
 }
