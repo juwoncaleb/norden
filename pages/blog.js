@@ -27,32 +27,32 @@ export default function BlogListPage({ blogs }) {
           <p className="text-gray-500 py-10 text-lg">No blog posts found.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((item) => {
-              const post = item.fields;
+           {blogs.map((item) => {
+  const post = item.fields;
 
-              const thumbnailUrl = post.Thumbnail?.fields?.file?.url
-                ? `https:${post.Thumbnail.fields.file.url}`
-                : "/placeholder.jpg";
+  const thumbnailUrl = post.thumbnail?.fields?.file?.url
+    ? `https:${post.thumbnail.fields.file.url}`
+    : "/placeholder.jpg";
 
-              return (
-                <Link key={item.sys.id} href={`/blog/${item.sys.id}`}>
-                  <div className="cursor-pointer group">
-                    <div className="relative aspect-video w-full mb-3 bg-stone-100 rounded-md overflow-hidden">
-                      <Image
-                        src={thumbnailUrl}
-                        alt={post.title || "Blog thumbnail"}
-                        fill
-                        className="object-cover group-hover:scale-105 transition"
-                      />
-                    </div>
+  return (
+    <Link key={item.sys.id} href={`/blog/${item.sys.id}`}>
+      <div className="cursor-pointer group">
+        <div className="relative aspect-video w-full mb-3 bg-stone-100 rounded-md overflow-hidden">
+          <Image
+            src={thumbnailUrl}
+            alt={post.title || "Blog thumbnail"}
+            fill
+            className="object-cover group-hover:scale-105 transition"
+          />
+        </div>
 
-                    <h2 className="text-lg font-serif font-semibold text-stone-900">
-                      {post.title}
-                    </h2>
-                  </div>
-                </Link>
-              );
-            })}
+        <h2 className="text-lg font-serif font-semibold text-stone-900">
+          {post.title}
+        </h2>
+      </div>
+    </Link>
+  );
+})}
           </div>
         )}
       </main>
