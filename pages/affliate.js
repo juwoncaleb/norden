@@ -35,7 +35,7 @@ export default function AffiliatePage() {
 
           <p>
             Share about your favourite Nordenproducts and earn commission.
-            It's as simple as that.
+            It is as simple as that.
           </p>
 
           <a
@@ -68,7 +68,7 @@ export default function AffiliatePage() {
           <h2>How It Works</h2>
 
           <p>
-            Whether you're a media partner, content site or network, you'll
+            Whether you are a media partner, content site or network, youll
             earn a competitive commission rate for every qualified purchase
             made through your affiliate link on your website, newsletters or
             social media. With a wide range of home décor and furniture on
