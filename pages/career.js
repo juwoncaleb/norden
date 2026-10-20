@@ -1,5 +1,3 @@
-
-import React from "react";
 import Link from "next/link";
 import { Cormorant_Garamond } from "next/font/google";
 
@@ -12,7 +10,7 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
 });
 
-export default function JoinUs({ jobs }) {
+export default function JoinUs({ jobs = [] }) {
   return (
     <div className={cormorant.className}>
       <Header />
@@ -22,27 +20,28 @@ export default function JoinUs({ jobs }) {
           <h1>Come join us!</h1>
 
           <p>
-            At Norden, we design and make quality, beautiful furniture for
-            real life: the kind that helps people shape spaces they can truly
-            live in, grow in, and feel good coming home to.
+            At Norden, we design and make quality, beautiful furniture
+            for real life: the kind that helps people shape spaces they
+            can truly live in, grow in, and feel good coming home to.
           </p>
 
           <p>
-            We take pride in manufacturing our own pieces, and we bring that
-            same care to the way we work. We are building Norden with the same
-            ambition we bring to our designs: creating something better,
-            more thoughtful, and made to last.
+            We take pride in manufacturing our own pieces, and we bring
+            that same care to the way we work. We are building Norden
+            with the same ambition we bring to our designs: creating
+            something better, more thoughtful, and made to last.
           </p>
 
           <p>
-            We are growing and looking for people who want to build something
-            with real staying power. Around here, good ideas are heard,
-            initiative goes far, and ambitious self-starters have room to
-            make their mark.
+            We are growing and looking for people who want to build
+            something with real staying power. Around here, good ideas
+            are heard, initiative goes far, and ambitious self-starters
+            have room to make their mark.
           </p>
 
           <p>
-            If making an impact gets you out of bed in the morning, come join us.
+            If making an impact gets you out of bed in the morning,
+            come join us.
           </p>
 
           <a href="#open-positions" className="join-btn">
@@ -50,7 +49,7 @@ export default function JoinUs({ jobs }) {
           </a>
         </section>
 
-        {/* JOBS FROM CONTENTFUL */}
+        {/* Jobs retrieved from Contentful */}
         <section id="open-positions" className="positions">
           <div className="positions-heading">
             <p className="eyebrow">CAREERS AT NORDEN</p>
@@ -60,11 +59,12 @@ export default function JoinUs({ jobs }) {
 
           {jobs.length === 0 ? (
             <p className="no-jobs">
-              There are no open positions at the moment. Please check back soon.
+              There are no open positions at the moment.
+              Please check back soon.
             </p>
           ) : (
             jobs.map((job) => {
-              const fields = job.fields;
+              const fields = job.fields || {};
 
               return (
                 <Link
@@ -74,7 +74,7 @@ export default function JoinUs({ jobs }) {
                 >
                   <div className="job-info">
                     <h3>
-                      {fields.title}
+                      {fields.title || "Open Position"}
 
                       {fields.isNew && (
                         <span className="new-badge">New</span>
@@ -92,7 +92,10 @@ export default function JoinUs({ jobs }) {
                     </p>
                   </div>
 
-                  <span className="job-arrow" aria-hidden="true">
+                  <span
+                    className="job-arrow"
+                    aria-hidden="true"
+                  >
                     ↗
                   </span>
                 </Link>
@@ -113,10 +116,11 @@ export default function JoinUs({ jobs }) {
         .join-text {
           max-width: 1000px;
           margin: 0 auto;
-          padding: clamp(48px, 7vw, 90px) clamp(20px, 5vw, 60px);
+          padding: clamp(48px, 7vw, 90px)
+            clamp(20px, 5vw, 60px);
         }
 
-        h1 {
+        .join-text h1 {
           margin: 0 0 36px;
           font-weight: 400;
           font-size: clamp(2.4rem, 5vw, 3.6rem);
@@ -124,8 +128,8 @@ export default function JoinUs({ jobs }) {
         }
 
         .join-text > p {
-          margin: 0 0 24px;
           max-width: 850px;
+          margin: 0 0 24px;
           font-size: clamp(1.1rem, 1.6vw, 1.3rem);
           line-height: 1.7;
         }
@@ -171,18 +175,18 @@ export default function JoinUs({ jobs }) {
         }
 
         .positions-heading > p:last-child {
+          color: #74665c;
           font-size: 1.1rem;
           line-height: 1.6;
-          color: #74665c;
         }
 
         .job-link {
-          max-width: 1000px;
-          margin: 0 auto;
           display: flex;
+          max-width: 1000px;
           align-items: center;
           justify-content: space-between;
           gap: 20px;
+          margin: 0 auto;
           padding: 24px 0;
           border-bottom: 1px solid #e3ddd7;
           color: #3a1020;
@@ -190,7 +194,7 @@ export default function JoinUs({ jobs }) {
           transition: color 0.2s;
         }
 
-        .job-link:first-of-type {
+        .positions-heading + .job-link {
           border-top: 1px solid #e3ddd7;
         }
 
@@ -221,9 +225,10 @@ export default function JoinUs({ jobs }) {
         }
 
         .new-badge {
+          display: inline-block;
           padding: 5px 8px;
           background: #b96337;
-          color: white;
+          color: #fff;
           font-family: Arial, sans-serif;
           font-size: 0.65rem;
           letter-spacing: 0.5px;
@@ -282,7 +287,9 @@ export async function getStaticProps() {
   const jobs = await getAllJobs();
 
   return {
-    props: { jobs },
+    props: {
+      jobs,
+    },
     revalidate: 60,
   };
 }
