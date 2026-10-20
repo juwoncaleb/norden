@@ -40,6 +40,7 @@ const COLUMNS = [
     links: [
       { label: "Our Story", href: "/about" },
       { label: "Blog", href: "/blog" },
+      { label: "Career", href: "/Career" },
       { label: "Delivery", href: "/delivery" },
       { label: "Ambassador", href: "/ambassdor" },
       { label: "Affilate", href: "/affliate" },
