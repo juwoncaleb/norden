@@ -1,0 +1,93 @@
+.careers-page {
+  min-height: 100vh;
+  background: #fff;
+  color: #321b20;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.careers-container {
+  width: min(100% - 48px, 1356px);
+  margin: 0 auto;
+  padding: 32px 0 80px;
+}
+
+.department {
+  margin-bottom: 46px;
+}
+
+.department h2 {
+  margin: 0 0 22px;
+  color: #98421f;
+  font-family: Arial, sans-serif;
+  font-size: 29px;
+  font-weight: 400;
+}
+
+.job-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 24px 6px 18px;
+  border-bottom: 1px solid #d1c4c0;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.job-row:hover {
+  background: #faf7f4;
+}
+
+.job-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.job-location {
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.new-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #c65319;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+@media (max-width: 600px) {
+  .careers-container {
+    width: calc(100% - 32px);
+    padding-top: 24px;
+    padding-bottom: 48px;
+  }
+
+  .department {
+    margin-bottom: 32px;
+  }
+
+  .department h2 {
+    margin-bottom: 14px;
+    font-size: 25px;
+  }
+
+  .job-row {
+    padding: 19px 4px 15px;
+  }
+
+  .job-title {
+    font-size: 17px;
+  }
+
+  .job-location {
+    font-size: 15px;
+  }
+}

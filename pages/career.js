@@ -1,140 +1,288 @@
+
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Cormorant_Garamond } from "next/font/google";
 
 import Header from "./component/Header";
 import Footer from "./component/footer";
+import { getAllJobs } from "../lib/contentful";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-// Change these to match your site
-const IMAGE_SRC = "/join-us.jpeg"; // put your photo in /public
-const OPEN_POSITIONS_URL = "/careers";
-
-export default function JoinUs() {
+export default function JoinUs({ jobs }) {
   return (
     <div className={cormorant.className}>
       <Header />
 
       <main className="join">
-        <div className="join-text">
+        <section className="join-text">
           <h1>Come join us!</h1>
 
           <p>
-            At Norden, we design and make quality, beautiful furniture for real
-            life: the kind that helps people shape spaces they can truly live
-            in, grow in, and feel good coming home to.
+            At Norden, we design and make quality, beautiful furniture for
+            real life: the kind that helps people shape spaces they can truly
+            live in, grow in, and feel good coming home to.
           </p>
 
           <p>
             We take pride in manufacturing our own pieces, and we bring that
             same care to the way we work. We are building Norden with the same
-            ambition we bring to our designs: creating something better, more
-            thoughtful, and made to last.
+            ambition we bring to our designs: creating something better,
+            more thoughtful, and made to last.
           </p>
 
           <p>
             We are growing and looking for people who want to build something
             with real staying power. Around here, good ideas are heard,
-            initiative goes far, and ambitious self-starters have room to make
-            their mark.
+            initiative goes far, and ambitious self-starters have room to
+            make their mark.
           </p>
 
           <p>
-            If making an impact gets you out of bed in the morning, come join
-            us.
+            If making an impact gets you out of bed in the morning, come join us.
           </p>
 
-          <Link href={OPEN_POSITIONS_URL} className="join-btn">
+          <a href="#open-positions" className="join-btn">
             See Open Positions
-          </Link>
-        </div>
+          </a>
+        </section>
 
+        {/* JOBS FROM CONTENTFUL */}
+        <section id="open-positions" className="positions">
+          <div className="positions-heading">
+            <p className="eyebrow">CAREERS AT NORDEN</p>
+            <h2>Open Positions</h2>
+            <p>Find your next opportunity and grow with us.</p>
+          </div>
+
+          {jobs.length === 0 ? (
+            <p className="no-jobs">
+              There are no open positions at the moment. Please check back soon.
+            </p>
+          ) : (
+            jobs.map((job) => {
+              const fields = job.fields;
+
+              return (
+                <Link
+                  href={`/career/${job.sys.id}`}
+                  className="job-link"
+                  key={job.sys.id}
+                >
+                  <div className="job-info">
+                    <h3>
+                      {fields.title}
+
+                      {fields.isNew && (
+                        <span className="new-badge">New</span>
+                      )}
+                    </h3>
+
+                    <p>
+                      {[
+                        fields.department,
+                        fields.location,
+                        fields.employmentType,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  </div>
+
+                  <span className="job-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </Link>
+              );
+            })
+          )}
+        </section>
       </main>
 
       <Footer />
 
       <style jsx>{`
         .join {
-          display: grid;
-          grid-template-columns: 1fr minmax(320px, 32%);
-          min-height: 640px;
           background: #faf9f6;
           color: #3a1020;
         }
 
         .join-text {
-          align-self: center;
-          max-width: 820px;
-          padding: clamp(40px, 6vw, 80px) clamp(20px, 3vw, 40px);
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: clamp(48px, 7vw, 90px) clamp(20px, 5vw, 60px);
         }
 
         h1 {
-          margin: 0 0 clamp(24px, 4vw, 48px);
+          margin: 0 0 36px;
           font-weight: 400;
-          font-size: clamp(2.2rem, 4vw, 3rem);
+          font-size: clamp(2.4rem, 5vw, 3.6rem);
           line-height: 1.1;
         }
 
-        p {
+        .join-text > p {
           margin: 0 0 24px;
-          font-size: clamp(1.15rem, 1.6vw, 1.35rem);
-          line-height: 1.5;
+          max-width: 850px;
+          font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+          line-height: 1.7;
         }
 
-        .join-text :global(.join-btn) {
+        .join-btn {
           display: inline-block;
-          margin-top: clamp(16px, 3vw, 32px);
-          padding: 16px 26px;
+          margin-top: 16px;
+          padding: 15px 26px;
           border: 1px solid #3a1020;
           color: #3a1020;
           text-decoration: none;
-          font-size: 1.15rem;
+          font-size: 1.1rem;
           transition: background 0.2s, color 0.2s;
         }
 
-        .join-text :global(.join-btn:hover) {
+        .join-btn:hover {
           background: #3a1020;
           color: #fff;
         }
 
-        .join-img {
-          position: relative;
-          min-height: 420px;
+        .positions {
+          scroll-margin-top: 30px;
+          padding: 70px clamp(20px, 5vw, 60px) 90px;
+          background: #fff;
+          color: #3a1020;
         }
 
-        /* Tablet and mobile: stack with the photo on top */
-        @media (max-width: 800px) {
-          .join {
-            grid-template-columns: 1fr;
-            min-height: 0;
-          }
+        .positions-heading {
+          max-width: 1000px;
+          margin: 0 auto 42px;
+        }
 
-          .join-img {
-            order: -1;
-            min-height: 0;
-            aspect-ratio: 4 / 3;
-          }
+        .eyebrow {
+          color: #a45f3a;
+          font-size: 0.8rem;
+          letter-spacing: 2px;
+        }
 
+        .positions-heading h2 {
+          margin: 12px 0;
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 400;
+        }
+
+        .positions-heading > p:last-child {
+          font-size: 1.1rem;
+          line-height: 1.6;
+          color: #74665c;
+        }
+
+        .job-link {
+          max-width: 1000px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          padding: 24px 0;
+          border-bottom: 1px solid #e3ddd7;
+          color: #3a1020;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+
+        .job-link:first-of-type {
+          border-top: 1px solid #e3ddd7;
+        }
+
+        .job-link:hover {
+          color: #a45f3a;
+        }
+
+        .job-info {
+          min-width: 0;
+        }
+
+        .job-info h3 {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 10px;
+          margin: 0 0 8px;
+          font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+          font-weight: 400;
+          line-height: 1.5;
+        }
+
+        .job-info p {
+          margin: 0;
+          color: #786d64;
+          font-size: 0.95rem;
+          line-height: 1.6;
+        }
+
+        .new-badge {
+          padding: 5px 8px;
+          background: #b96337;
+          color: white;
+          font-family: Arial, sans-serif;
+          font-size: 0.65rem;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+        }
+
+        .job-arrow {
+          flex-shrink: 0;
+          font-size: 1.5rem;
+        }
+
+        .no-jobs {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 28px 0;
+          border-top: 1px solid #e3ddd7;
+          color: #74665c;
+          line-height: 1.7;
+        }
+
+        @media (max-width: 600px) {
           .join-text {
-            max-width: none;
-            padding: 32px 20px 48px;
+            padding: 42px 20px 55px;
           }
-        }
 
-        /* Small phones: full-width button */
-        @media (max-width: 480px) {
-          .join-text :global(.join-btn) {
+          .join-text > p {
+            line-height: 1.65;
+          }
+
+          .join-btn {
             display: block;
             width: 100%;
+            box-sizing: border-box;
             text-align: center;
+          }
+
+          .positions {
+            padding: 48px 20px 60px;
+          }
+
+          .job-link {
+            padding: 20px 0;
+            gap: 12px;
+          }
+
+          .job-info p {
+            font-size: 0.85rem;
           }
         }
       `}</style>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const jobs = await getAllJobs();
+
+  return {
+    props: { jobs },
+    revalidate: 60,
+  };
 }
