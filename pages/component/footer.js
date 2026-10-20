@@ -20,6 +20,10 @@ const COLUMNS = [
   {
     title: "Shopping With Us",
     links: [
+      { label: "The Norden Club", href: "/nordenclub" },
+      { label: "Refer", href: "/refer" },
+      { label: "Product Guarantee", href: "/guarantee" },
+
       { label: "Signature Headboards", href: "/signature" },
       { label: "Custom Headboards", href: "/custom" },
       { label: "Benches", href: "/benches" },
@@ -35,7 +39,11 @@ const COLUMNS = [
     title: "About Us",
     links: [
       { label: "Our Story", href: "/about" },
+      { label: "Blog", href: "/blog" },
       { label: "Delivery", href: "/delivery" },
+      { label: "Ambassador", href: "/ambassdor" },
+      { label: "Affilate", href: "/affliate" },
+
       { label: "Contact Us", href: "https://wa.me/2348068520499" },
       { label: "TC", href: "/tc" },
     ],
@@ -43,7 +51,11 @@ const COLUMNS = [
 ];
 
 const SOCIAL = [
-  { label: "f", name: "Facebook" , href:"https://web.facebook.com/profile.php?id=100080173489561&sk=followers" },
+  {
+    label: "f",
+    name: "Facebook",
+    href: "https://web.facebook.com/profile.php?id=100080173489561&sk=followers",
+  },
   { label: "p", name: "Pinterest" },
   { label: "ig", name: "Instagram", href: "https://instagram.com/norden.hq" },
 ];
@@ -494,10 +506,7 @@ export default function Footer() {
               )}
 
               {/* LINKS */}
-              <ul
-                id={id}
-                className={`footer_list ${isOpen ? "is_open" : ""}`}
-              >
+              <ul id={id} className={`footer_list ${isOpen ? "is_open" : ""}`}>
                 {column.links.map((item) => (
                   <li key={item.label} className="footer_link">
                     {isExternal(item.href) ? (
@@ -562,7 +571,7 @@ export default function Footer() {
                   >
                     {icon.label}
                   </div>
-                )
+                ),
               )}
             </div>
 
@@ -587,7 +596,7 @@ export default function Footer() {
               </Link>
             ) : (
               <span key={item.label}>{item.label}</span>
-            )
+            ),
           )}
         </div>
 

@@ -1,0 +1,371 @@
+
+/* ==============================
+   GLOBAL PAGE STYLES
+============================== */
+
+.ambassador-page {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  color: #300d0d;
+  background: #f7f4e8;
+  font-family: Georgia, "Times New Roman", serif;
+  box-sizing: border-box;
+}
+
+.ambassador-page *,
+.ambassador-page *::before,
+.ambassador-page *::after {
+  box-sizing: border-box;
+}
+
+.ambassador-page img {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* ==============================
+   HERO SECTION
+============================== */
+
+.ambassador-hero {
+  display: grid;
+  grid-template-columns: 57.7% 42.3%;
+  width: 100%;
+  min-height: 540px;
+}
+
+.ambassador-hero-image {
+  width: 100%;
+  min-width: 0;
+  min-height: 540px;
+}
+
+.ambassador-hero-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.ambassador-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 50px 30px;
+  text-align: center;
+  background: #c4b28b;
+  color: #fff;
+}
+
+.ambassador-hero-content h1 {
+  width: 100%;
+  margin: 0 0 8px;
+  font-size: clamp(28px, 2.3vw, 42px);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.ambassador-hero-content p {
+  width: 100%;
+  max-width: 650px;
+  margin: 0;
+  font-size: clamp(16px, 1.25vw, 21px);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.ambassador-apply-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 52px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: 1px solid #451818;
+  border-radius: 10px;
+  color: #451818;
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  letter-spacing: 3px;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.ambassador-apply-button:hover {
+  background: #451818;
+  color: #fff;
+}
+
+.ambassador-arrow {
+  font-family: Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+
+/* ==============================
+   GENERAL CONTENT SECTIONS
+============================== */
+
+.ambassador-section {
+  width: 100%;
+  padding: 0 0 45px;
+  background: #f7f4e8;
+}
+
+.ambassador-section h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85px;
+  margin: 0;
+  padding: 18px 20px;
+  background: #fcfaf6;
+  color: #080808;
+  text-align: center;
+  font-size: clamp(27px, 2vw, 36px);
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+
+/* ==============================
+   THREE-COLUMN IMAGE GRID
+============================== */
+
+.ambassador-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 2.6%;
+  row-gap: 35px;
+  width: 100%;
+  padding: 0 2.1%;
+}
+
+.ambassador-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: center;
+}
+
+.ambassador-card > img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+.ambassador-card-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 42px 10px 0;
+}
+
+.ambassador-location-icon {
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 22px;
+  color: #555;
+}
+
+.ambassador-location-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ambassador-card-content p {
+  width: 100%;
+  margin: 0;
+  color: #401010;
+  font-size: clamp(16px, 1.25vw, 21px);
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+
+/* ==============================
+   TABLET RESPONSIVENESS
+============================== */
+
+@media (max-width: 900px) {
+  .ambassador-hero {
+    grid-template-columns: 1fr 1fr;
+    min-height: 400px;
+  }
+
+  .ambassador-hero-image,
+  .ambassador-hero-image img {
+    min-height: 400px;
+  }
+
+  .ambassador-hero-content {
+    padding: 35px 22px;
+  }
+
+  .ambassador-hero-content h1 {
+    font-size: 30px;
+  }
+
+  .ambassador-hero-content p {
+    font-size: 16px;
+  }
+
+  .ambassador-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 20px;
+    padding: 0 20px;
+  }
+
+  .ambassador-card-content {
+    padding-top: 28px;
+  }
+
+  .ambassador-card-content p {
+    font-size: 18px;
+  }
+}
+
+
+/* ==============================
+   MOBILE RESPONSIVENESS
+============================== */
+
+@media (max-width: 600px) {
+  .ambassador-hero {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .ambassador-hero-image {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .ambassador-hero-image img {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .ambassador-hero-content {
+    width: 100%;
+    padding: 35px 20px 40px;
+  }
+
+  .ambassador-hero-content h1 {
+    margin-bottom: 12px;
+    font-size: 29px;
+    line-height: 1.2;
+  }
+
+  .ambassador-hero-content p {
+    max-width: 460px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .ambassador-apply-button {
+    min-height: 48px;
+    gap: 18px;
+    margin-top: 20px;
+    padding: 9px 15px;
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+
+  .ambassador-arrow {
+    font-size: 25px;
+  }
+
+  .ambassador-section {
+    padding-bottom: 30px;
+  }
+
+  .ambassador-section h2 {
+    min-height: 75px;
+    padding: 22px 15px;
+    font-size: 27px;
+  }
+
+  .ambassador-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    padding: 0 16px;
+  }
+
+  .ambassador-card {
+    width: 100%;
+  }
+
+  .ambassador-card > img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .ambassador-card-content {
+    padding: 20px 8px 0;
+  }
+
+  .ambassador-location-icon {
+    width: 23px;
+    height: 23px;
+    margin-bottom: 12px;
+  }
+
+  .ambassador-card-content p {
+    max-width: 440px;
+    margin: 0 auto;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+}
+
+
+/* ==============================
+   SMALL MOBILE PHONES
+============================== */
+
+@media (max-width: 380px) {
+  .ambassador-hero-content {
+    padding: 30px 16px;
+  }
+
+  .ambassador-hero-content h1 {
+    font-size: 25px;
+  }
+
+  .ambassador-hero-content p {
+    font-size: 15px;
+  }
+
+  .ambassador-section h2 {
+    font-size: 24px;
+  }
+
+  .ambassador-grid {
+    padding: 0 12px;
+  }
+
+  .ambassador-card-content p {
+    font-size: 16px;
+  }
+}

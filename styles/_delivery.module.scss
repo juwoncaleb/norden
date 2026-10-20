@@ -19,3 +19,31 @@
       font-family: "Radley", serif;
 
 }
+
+/* Append to the END of your stylesheet - used by the Delivery and Product Guarantee pages */
+
+/* Space between the header and the page text */
+.delivery_div {
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+
+/* Bold sub-headings */
+.delivery_texts .delivery_heading {
+  margin: 0 0 14px;
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1.2;
+}
+
+/* Bullet lists */
+.delivery_texts .delivery_list {
+  margin: 0 0 24px;
+  padding-left: 1.4em;
+  list-style: disc;
+}
+
+.delivery_texts .delivery_list li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
