@@ -31,7 +31,7 @@ export default function LandingPage({entries}) {
       </section>
 
       {/* NORMAL CONTENT BELOW */}
-      <section className="discount_div flex justify-center">
+      {/* <section className="discount_div flex justify-center">
         <div className="discount_price">
           <p className="discount_head">N 1,000,000 off</p>
           <p>N1,500,000 min.spend</p>
@@ -44,7 +44,7 @@ export default function LandingPage({entries}) {
           <p className="discount_head">N159,000 off</p>
           <p>N1,500,000 min.spend</p>
         </div>
-      </section>
+      </section> */}
       <div className="carousel_img">
         {/* TEXTS */}
         <div className="image__text">
