@@ -9,7 +9,10 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
 });
 
-const pageStyle = { paddingTop: "80px", paddingBottom: "80px" };
+const pageStyle = {
+  paddingTop: "80px",
+  paddingBottom: "80px",
+};
 
 const headingStyle = {
   margin: "0 0 14px",
@@ -28,16 +31,16 @@ const sections = [
   {
     title: "Our promise",
     paragraphs: [
-      "At Norden, we design and manufacture our furniture to last. Every piece is made with care, checked before it leaves us, and backed by our product guarantee. If something is not right, we will work with you to fix it.",
+      "At NÓRDEN, we design and manufacture our furniture with quality, comfort and longevity in mind. Every piece is carefully made and inspected before it leaves our facility. Our product guarantee is designed to give you confidence in your purchase. If something is not right due to a manufacturing defect, we will work with you to find an appropriate solution.",
     ],
   },
   {
     title: "What is covered",
     paragraphs: [
-      "Our guarantee covers defects in materials and workmanship that appear under normal home use. Coverage depends on the part of the product:",
+      "Our product guarantee covers manufacturing defects in materials and workmanship that arise under normal residential use. Coverage depends on the component of the product:",
     ],
     list: [
-      "Frames and structure: 5 years.",
+      "Frames and structural components: 5 years.",
       "Upholstery, fabric seams and cushion fillings: 1 year.",
       "Finishes, hardware and moving mechanisms: 1 year.",
       "Accessories and soft furnishings: 90 days.",
@@ -46,51 +49,57 @@ const sections = [
   {
     title: "What is not covered",
     paragraphs: [
-      "The guarantee is designed to protect you from manufacturing faults, so it does not cover damage caused after delivery. This includes:",
+      "Our guarantee is intended to protect you against manufacturing defects. It does not cover damage or deterioration caused by normal use, improper care or circumstances outside the intended use of the product. This includes:",
     ],
     list: [
-      "Normal wear and tear, such as gradual fading, softening of cushions or light surface marks.",
-      "Stains, spills, burns, scratches, pet damage or damage from sharp objects.",
-      "Damage from misuse, overloading, or assembly that does not follow our instructions.",
-      "Exposure to direct sunlight, moisture, extreme heat or cold, or use outdoors unless the product is made for it.",
-      "Repairs or changes made by anyone other than Norden or an approved partner.",
-      "Products bought from unauthorised sellers, or used commercially.",
+      "Normal wear and tear, including gradual fading, natural softening of cushions or minor surface marks.",
+      "Stains, spills, burns, scratches, pet damage or damage caused by sharp or abrasive objects.",
+      "Damage caused by misuse, overloading, improper handling or incorrect assembly.",
+      "Damage caused by direct sunlight, excessive moisture, extreme heat or cold, or outdoor use unless the product is specifically designed for outdoor use.",
+      "Damage caused by moving, transporting or storing the furniture after delivery.",
+      "Repairs, alterations or modifications carried out by anyone other than NÓRDEN or an approved service partner.",
+      "Products purchased from unauthorised sellers.",
+      "Products used for commercial purposes unless the product was specifically purchased and approved for commercial use.",
     ],
   },
   {
     title: "How to make a claim",
     paragraphs: [
-      "Making a claim is simple. Email us at info@norden.org with the details below, and our team will review it as quickly as possible.",
+      "If you believe your product has a manufacturing defect, please contact the NÓRDEN team with the details of your purchase. Our team will review your claim and advise you on the next steps.",
     ],
     list: [
-      "Your order number, or proof of purchase.",
-      "A short description of the problem.",
-      "Clear photos or a short video showing the issue and the whole product.",
+      "Your order number or proof of purchase.",
+      "A short description of the issue.",
+      "Clear photographs showing the problem.",
+      "A short video where the issue is difficult to demonstrate through photographs.",
+      "Photographs showing the overall condition of the product where relevant.",
     ],
   },
   {
     title: "What happens next",
     paragraphs: [
-      "Once we have reviewed your claim, we will choose the best solution for you. Depending on the issue, we may repair the item, send replacement parts, replace the product, or offer a refund or credit if a repair or replacement is not possible.",
-      "In some cases we may ask for an inspection or for the faulty item to be returned. If we do, we will arrange this with you and cover the cost of collection for approved claims.",
+      "Once we receive your claim, our team will assess the issue and determine the most appropriate solution. Depending on the nature of the problem, we may repair the item, provide replacement parts, replace the affected product or offer another appropriate remedy.",
+      "In some cases, we may need to inspect the furniture before determining the solution. If a collection or inspection is required for an approved guarantee claim, we will coordinate the process with you.",
+      "The final resolution will depend on the nature of the defect, the availability of replacement parts or products, and the circumstances of the claim.",
     ],
   },
   {
-    title: "Looking after your furniture",
+    title: "Looking after your NÓRDEN furniture",
     paragraphs: [
-      "A little care goes a long way. Keep your furniture away from direct heat and strong sunlight, clean spills straight away, and follow the care instructions that come with your product. Rotating and plumping cushions regularly helps them keep their shape and wear evenly.",
+      "Proper care will help your furniture maintain its appearance, comfort and condition for years to come. Follow the care instructions provided with your product and use furniture only for its intended purpose.",
+      "Keep furniture away from excessive heat and prolonged direct sunlight where possible. Clean spills promptly and use only appropriate cleaning products for the material. For upholstered furniture, regularly rotate and gently plump cushions where applicable to help maintain their shape and ensure even wear.",
     ],
   },
   {
     title: "Your legal rights",
     paragraphs: [
-      "This guarantee is in addition to your legal rights as a consumer, and does not affect them. Nothing in this guarantee limits any rights that you have under the law in your country.",
+      "This product guarantee is provided in addition to any rights you may have under applicable Nigerian consumer protection laws. Nothing in this guarantee is intended to exclude or limit any legal rights that cannot lawfully be excluded or limited.",
     ],
   },
   {
     title: "Need help?",
     paragraphs: [
-      "If you have a question about your guarantee, email us at info@norden.org and we will be glad to help.",
+      "If you have a question about your NÓRDEN product guarantee or would like to make a claim, please contact our customer care team through the contact details provided on our website. Please include your order number where applicable so that we can assist you as quickly as possible.",
     ],
   },
 ];
@@ -100,26 +109,49 @@ export default function ProductGuarantee() {
     <div className={cormorant.className}>
       <Header />
 
-      <div className="delivery_div" style={pageStyle}>
-        <p className="delivery_font">Product Guarantee</p>
+      <div
+        className="delivery_div"
+        style={pageStyle}
+      >
+        <p className="delivery_font">
+          Product Guarantee
+        </p>
 
         <div className="delivery_texts">
-          <p className="mb-10">Last updated: Oct 20, 2026</p>
+          <p className="mb-10">
+            Last updated: October 21, 2026
+          </p>
 
           {sections.map((section) => (
-            <section key={section.title} className="mb-10">
-              <h2 className="delivery_heading" style={headingStyle}>{section.title}</h2>
+            <section
+              key={section.title}
+              className="mb-10"
+            >
+              <h2
+                className="delivery_heading"
+                style={headingStyle}
+              >
+                {section.title}
+              </h2>
 
               {section.paragraphs.map((text, i) => (
-                <p key={i} className="mb-6">
+                <p
+                  key={i}
+                  className="mb-6"
+                >
                   {text}
                 </p>
               ))}
 
               {section.list && (
-                <ul className="delivery_list mb-6" style={listStyle}>
+                <ul
+                  className="delivery_list mb-6"
+                  style={listStyle}
+                >
                   {section.list.map((item) => (
-                    <li key={item}>{item}</li>
+                    <li key={item}>
+                      {item}
+                    </li>
                   ))}
                 </ul>
               )}
