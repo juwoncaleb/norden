@@ -42,6 +42,7 @@ function formatPrice(value) {
 export default function SofaListPage({ sofas }) {
   return (
     <div>
+      
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-10 min-h-[70vh]">
