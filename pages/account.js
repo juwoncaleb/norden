@@ -329,7 +329,7 @@ export default function Account() {
 
                       <p>
                         Have questions about your order or our
-                        furniture? We're here to help.
+                        furniture? We are here to help.
                       </p>
                     </div>
 
