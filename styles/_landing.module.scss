@@ -218,3 +218,96 @@ $bp-phone: 600px;
 .background_div {
   font-family: "Radley", serif;
 }
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  min-height: 550px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .video-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  // Dark overlay
+  .overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  // Center text and button
+  .hero-content {
+    position: relative;
+    z-index: 3;
+
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    text-align: center;
+
+    h1 {
+      margin: 0;
+      width: 100%;
+      color: white;
+      font-family: "Radley", serif;
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 400;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .seebtn {
+      padding: 15px 40px;
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      font-family: "Radley", serif;
+      font-size: 17px;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      &:hover {
+        background: white;
+        color: #222;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    height: 75vh;
+    min-height: 450px;
+
+    .hero-content {
+      gap: 24px;
+
+      h1 {
+        font-size: 36px;
+      }
+    }
+  }
+}
