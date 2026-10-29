@@ -1,28 +1,35 @@
-// pages/career.js
 
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { Cormorant_Garamond } from "next/font/google";
 
 import Header from "./component/Header";
 import Footer from "./component/footer";
 
 import { getAllJobs } from "../lib/contentful";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 export default function Career({ jobs = [] }) {
   return (
-    <div className={cormorant.className}>
+    <div className="career-page">
       <Head>
         <title>Careers | Norden</title>
         <meta
           name="description"
           content="Explore career opportunities at Norden."
+        />
+
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
         />
       </Head>
 
@@ -45,20 +52,26 @@ export default function Career({ jobs = [] }) {
               meaningful experiences, and exceptional products.
             </p>
 
-            <a href="#open-positions" className="positions-button">
+            <a
+              href="#open-positions"
+              className="positions-button"
+            >
               See Open Positions
             </a>
           </div>
         </section>
 
         {/* OPEN POSITIONS */}
-        <section id="open-positions" className="open-positions">
+        <section
+          id="open-positions"
+          className="open-positions"
+        >
           <div className="section-heading">
             <p className="eyebrow">JOIN OUR TEAM</p>
             <h2>Open Positions</h2>
             <p>
-              Explore our available roles and find an opportunity
-              that suits you.
+              Explore our available roles and find an
+              opportunity that suits you.
             </p>
           </div>
 
@@ -75,17 +88,26 @@ export default function Career({ jobs = [] }) {
                   >
                     <div className="job-main">
                       <div className="job-title-row">
-                        <h3>{fields.title || "Untitled position"}</h3>
+                        <h3>
+                          {fields.title ||
+                            "Untitled position"}
+                        </h3>
 
                         {fields.isNew && (
-                          <span className="new-badge">New</span>
+                          <span className="new-badge">
+                            New
+                          </span>
                         )}
                       </div>
 
                       <p className="job-meta">
-                        {[fields.location, fields.employmentType]
+                        {[
+                          fields.location,
+                          fields.employmentType,
+                        ]
                           .filter(Boolean)
-                          .join(" · ") || "Details available"}
+                          .join(" · ") ||
+                          "Details available"}
                       </p>
 
                       {fields.department && (
@@ -95,7 +117,10 @@ export default function Career({ jobs = [] }) {
                       )}
                     </div>
 
-                    <span className="job-arrow" aria-hidden="true">
+                    <span
+                      className="job-arrow"
+                      aria-hidden="true"
+                    >
                       →
                     </span>
                   </Link>
@@ -104,10 +129,12 @@ export default function Career({ jobs = [] }) {
             </div>
           ) : (
             <div className="no-jobs">
-              <h3>No open positions at the moment</h3>
+              <h3>
+                No open positions at the moment
+              </h3>
               <p>
-                We do not have any published vacancies right now.
-                Please check back soon.
+                We do not have any published vacancies
+                right now. Please check back soon.
               </p>
             </div>
           )}
@@ -117,6 +144,10 @@ export default function Career({ jobs = [] }) {
       <Footer />
 
       <style jsx>{`
+        .career-page {
+          font-family: "Cormorant Garamond", Georgia, serif;
+        }
+
         .career-hero {
           background: #f5f2ed;
           min-height: 480px;
@@ -289,7 +320,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      jobs,
+      jobs: JSON.parse(JSON.stringify(jobs || [])),
     },
     revalidate: 60,
   };
