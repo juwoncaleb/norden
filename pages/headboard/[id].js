@@ -1,67 +1,442 @@
+
 import { createClient } from "contentful";
 import Header from "../component/Header";
 import Footer from "../component/footer";
 import CartDrawer from "../component/CartDrawer";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useCartStore } from "../../store/cartStore"; // adjust path to your folder depth
+import { useState, useEffect, useRef } from "react";
+import { useSession, signIn } from "next-auth/react";
+import { useCartStore } from "../../store/cartStore";
+
+// ============================================
+// CONFIGURATION
+// ============================================
+
+const PRODUCT_TYPE = "headboard";
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
 });
 
+// ============================================
+// FETCH HEADBOARD
+// ============================================
+
 export async function getServerSideProps({ params }) {
   try {
     const entry = await client.getEntry(params.id);
-    return { props: { entry: JSON.parse(JSON.stringify(entry)) } };
-  } catch (err) {
+
+    return {
+      props: {
+        entry: JSON.parse(JSON.stringify(entry)),
+      },
+    };
+  } catch (error) {
+    console.error("HEADBOARD FETCH ERROR:", error);
     return { notFound: true };
   }
 }
 
+// ============================================
+// HELPERS
+// ============================================
+
 function formatPrice(value) {
-  return "₦" + new Intl.NumberFormat("en-NG", {
-    maximumFractionDigits: 0,
-  }).format(value);
+  if (value == null) return "";
+
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return "";
+
+  return (
+    "₦" +
+    new Intl.NumberFormat("en-NG", {
+      maximumFractionDigits: 0,
+    }).format(amount)
+  );
 }
 
+function imageUrl(image, width) {
+  const url = image?.fields?.file?.url;
+  if (!url) return null;
+
+  const fullUrl = url.startsWith("//")
+    ? `https:${url}`
+    : url;
+
+  if (!width) return fullUrl;
+
+  return `${fullUrl}${
+    fullUrl.includes("?") ? "&" : "?"
+  }w=${width}`;
+}
+
+async function readWishlistResponse(response) {
+  let data;
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Invalid wishlist response.");
+  }
+
+  if (!response.ok || data.success === false) {
+    throw new Error(
+      data.error || "Unable to update wishlist."
+    );
+  }
+
+  return data;
+}
+
+// ============================================
+// HEART ICON
+// ============================================
+
+function HeartIcon({ filled = false }) {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill={filled ? "#8B3F1F" : "none"}
+      stroke="#8B3F1F"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
+    </svg>
+  );
+}
+
+// ============================================
+// HEADBOARD DETAIL PAGE
+// ============================================
+
 export default function HeadboardDetailPage({ entry }) {
-  const item = entry.fields;
+  const { data: session, status } = useSession();
+
   const [active, setActive] = useState(0);
 
-  // Cart
-  const addItem = useCartStore((state) => state.addItem);
-  const openCart = useCartStore((state) => state.openCart);
+  // Wishlist
+  const [isLiked, setIsLiked] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(true);
+  const [savingLike, setSavingLike] = useState(false);
+  const [heartAnimating, setHeartAnimating] =
+    useState(false);
 
-  const imageUrls = (item.images || [])
-    .map((img) => img?.fields?.file?.url)
-    .filter(Boolean)
-    .map((url) => `https:${url}`);
+  // Notifications
+  const [toast, setToast] = useState(null);
+
+  const pending = useRef(false);
+  const toastTimer = useRef(null);
+  const heartTimer = useRef(null);
+
+  // Cart
+  const addItem = useCartStore(
+    (state) => state.addItem
+  );
+
+  const openCart = useCartStore(
+    (state) => state.openCart
+  );
+
+  const productId = entry?.sys?.id;
+  const item = entry?.fields || {};
+
+  const images = Array.isArray(item.images)
+    ? item.images
+    : [];
+
+  const imageUrls = images
+    .map((image) => imageUrl(image))
+    .filter(Boolean);
 
   const hasDiscount =
-    item.discountedPrice != null && item.discountedPrice < item.price;
+    item.discountedPrice != null &&
+    item.price != null &&
+    Number(item.discountedPrice) <
+      Number(item.price);
 
   const tagList = Array.isArray(item.tags)
     ? item.tags
-    : item.tags
-    ? item.tags.split(",").map((t) => t.trim()).filter(Boolean)
+    : typeof item.tags === "string"
+    ? item.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
     : [];
 
-  const handleAddToCart = () => {
-    addItem({
-      id: entry.sys.id,
-      title: item.title,
-      price: hasDiscount ? item.discountedPrice : item.price,
-      image: imageUrls[0] ? `${imageUrls[0]}?w=400` : null,
+  // ============================================
+  // NOTIFICATIONS
+  // ============================================
+
+  function showToast(type, title, message) {
+    clearTimeout(toastTimer.current);
+
+    setToast({
+      id: Date.now(),
+      type,
+      title,
+      message,
     });
-    openCart(); // slides the cart drawer in from the right
-  };
+
+    toastTimer.current = setTimeout(() => {
+      setToast(null);
+    }, 3500);
+  }
+
+  function closeToast() {
+    clearTimeout(toastTimer.current);
+    setToast(null);
+  }
+
+  // ============================================
+  // LOAD SAVED LIKES
+  // ============================================
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!productId) {
+      setLoadingLike(false);
+      return;
+    }
+
+    if (status === "loading") {
+      setLoadingLike(true);
+      return;
+    }
+
+    if (status !== "authenticated") {
+      setIsLiked(false);
+      setLoadingLike(false);
+      return;
+    }
+
+    async function loadWishlist() {
+      setLoadingLike(true);
+
+      try {
+        const response = await fetch("/api/wishlist", {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        const data = await readWishlistResponse(
+          response
+        );
+
+        if (!Array.isArray(data.likes)) {
+          throw new Error("Invalid wishlist data.");
+        }
+
+        const liked = data.likes.some(
+          (like) =>
+            like.productId === productId &&
+            like.productType === PRODUCT_TYPE
+        );
+
+        if (!cancelled) {
+          setIsLiked(liked);
+        }
+      } catch (error) {
+        console.error(
+          "HEADBOARD WISHLIST LOAD ERROR:",
+          error
+        );
+
+        if (!cancelled) {
+          showToast(
+            "error",
+            "Wishlist unavailable",
+            error.message
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingLike(false);
+        }
+      }
+    }
+
+    loadWishlist();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [productId, status, session?.user?.email]);
+
+  // ============================================
+  // CLEANUP
+  // ============================================
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(toastTimer.current);
+      clearTimeout(heartTimer.current);
+    };
+  }, []);
+
+  // ============================================
+  // HEART ANIMATION
+  // ============================================
+
+  function animateHeart() {
+    clearTimeout(heartTimer.current);
+    setHeartAnimating(true);
+
+    heartTimer.current = setTimeout(() => {
+      setHeartAnimating(false);
+    }, 550);
+  }
+
+  // ============================================
+  // ADD / REMOVE LIKE
+  // ============================================
+
+  async function handleToggleLike() {
+    if (!productId || status === "loading") return;
+
+    if (status !== "authenticated") {
+      await signIn("google", {
+        callbackUrl: window.location.href,
+      });
+      return;
+    }
+
+    if (loadingLike || pending.current) return;
+
+    pending.current = true;
+    setSavingLike(true);
+
+    try {
+      const response = await fetch("/api/wishlist", {
+        method: isLiked ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          productId,
+          productType: PRODUCT_TYPE,
+        }),
+      });
+
+      const data = await readWishlistResponse(
+        response
+      );
+
+      if (typeof data.liked !== "boolean") {
+        throw new Error(
+          "Invalid wishlist update response."
+        );
+      }
+
+      setIsLiked(data.liked);
+      animateHeart();
+
+      showToast(
+        data.liked ? "success" : "removed",
+        data.liked
+          ? "Added to your likes"
+          : "Removed from your likes",
+        data.liked
+          ? "This headboard has been saved."
+          : "This headboard has been removed."
+      );
+    } catch (error) {
+      console.error(
+        "HEADBOARD WISHLIST UPDATE ERROR:",
+        error
+      );
+
+      showToast(
+        "error",
+        "Unable to update wishlist",
+        error.message
+      );
+    } finally {
+      pending.current = false;
+      setSavingLike(false);
+    }
+  }
+
+  // ============================================
+  // ADD TO CART
+  // ============================================
+
+  function handleAddToCart() {
+    if (!item.inStock) return;
+
+    addItem({
+      id: productId,
+      title: item.title,
+      price: hasDiscount
+        ? item.discountedPrice
+        : item.price,
+      image: imageUrl(images[0], 400),
+    });
+
+    openCart();
+  }
+
+  // ============================================
+  // PAGE
+  // ============================================
 
   return (
     <div>
       <Header />
+
+      {/* WISHLIST NOTIFICATION */}
+
+      {toast && (
+        <div
+          key={toast.id}
+          className={`norden-toast norden-toast--${toast.type}`}
+          role={
+            toast.type === "error"
+              ? "alert"
+              : "status"
+          }
+        >
+          <div className="norden-toast__icon">
+            {toast.type === "success"
+              ? "♥"
+              : toast.type === "removed"
+              ? "♡"
+              : "!"}
+          </div>
+
+          <div className="norden-toast__content">
+            <strong>{toast.title}</strong>
+            <p>{toast.message}</p>
+
+            {toast.type === "success" && (
+              <Link href="/likes">
+                View my likes
+              </Link>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="norden-toast__close"
+            onClick={closeToast}
+            aria-label="Close notification"
+          >
+            ✕
+          </button>
+
+          <div className="norden-toast__progress" />
+        </div>
+      )}
+
+      {/* HEADBOARD PRODUCT LAYOUT */}
 
       <main className="max-w-7xl mx-auto px-4 py-10 min-h-[70vh]">
         <Link
@@ -72,31 +447,54 @@ export default function HeadboardDetailPage({ entry }) {
         </Link>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* Images */}
+          {/* PRODUCT IMAGES */}
+
           <div>
             <div className="relative aspect-[4/3] w-full bg-stone-100 overflow-hidden">
-              <Image
-                src={imageUrls[active] || "/placeholder.jpg"}
-                alt={item.title || "Product image"}
-                fill
-                className="object-cover"
-              />
+              {imageUrls.length > 0 ? (
+                <Image
+                  src={
+                    imageUrls[active] ||
+                    imageUrls[0]
+                  }
+                  alt={
+                    item.title ||
+                    "Headboard image"
+                  }
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="headboard-no-image">
+                  No image available
+                </div>
+              )}
             </div>
+
+            {/* THUMBNAILS */}
 
             {imageUrls.length > 1 && (
               <div className="mt-3 grid grid-cols-5 gap-2">
                 {imageUrls.map((url, i) => (
                   <button
-                    key={url}
+                    key={`${url}-${i}`}
+                    type="button"
                     onClick={() => setActive(i)}
                     className={`relative aspect-square bg-stone-100 overflow-hidden border ${
-                      i === active ? "border-stone-900" : "border-transparent"
+                      i === active
+                        ? "border-stone-900"
+                        : "border-transparent"
                     }`}
+                    aria-label={`View image ${i + 1}`}
                   >
                     <Image
                       src={url}
                       alt={`${item.title} ${i + 1}`}
                       fill
+                      unoptimized
+                      sizes="100px"
                       className="object-cover"
                     />
                   </button>
@@ -105,20 +503,30 @@ export default function HeadboardDetailPage({ entry }) {
             )}
           </div>
 
-          {/* Details */}
-          <div>
-            <h1 className="text-3xl font-serif text-stone-900">{item.title}</h1>
+          {/* PRODUCT DETAILS */}
+
+          <div className="headboard-product-info">
+            <h1 className="text-3xl font-serif text-stone-900">
+              {item.title}
+            </h1>
 
             {item.material && (
-              <p className="text-stone-500 mt-2">{item.material}</p>
+              <p className="text-stone-500 mt-2">
+                {item.material}
+              </p>
             )}
+
+            {/* PRICE */}
 
             <div className="mt-4 flex items-baseline gap-3">
               {hasDiscount ? (
                 <>
                   <span className="text-2xl text-amber-800">
-                    {formatPrice(item.discountedPrice)}
+                    {formatPrice(
+                      item.discountedPrice
+                    )}
                   </span>
+
                   <span className="text-lg text-stone-400 line-through">
                     {formatPrice(item.price)}
                   </span>
@@ -130,19 +538,31 @@ export default function HeadboardDetailPage({ entry }) {
               )}
             </div>
 
+            {/* AVAILABILITY */}
+
             <p
               className={`mt-3 text-sm ${
-                item.inStock ? "text-green-700" : "text-stone-500"
+                item.inStock
+                  ? "text-green-700"
+                  : "text-stone-500"
               }`}
             >
-              {item.inStock ? "In stock" : "Out of stock"}
+              {item.inStock
+                ? "In stock"
+                : "Out of stock"}
             </p>
 
-            {typeof item.description === "string" && item.description && (
-              <p className="mt-6 text-stone-700 leading-relaxed whitespace-pre-line">
-                {item.description}
-              </p>
-            )}
+            {/* DESCRIPTION */}
+
+            {typeof item.description ===
+              "string" &&
+              item.description && (
+                <p className="mt-6 text-stone-700 leading-relaxed whitespace-pre-line">
+                  {item.description}
+                </p>
+              )}
+
+            {/* TAGS */}
 
             {tagList.length > 0 && (
               <ul className="mt-6 flex flex-wrap gap-2">
@@ -157,20 +577,606 @@ export default function HeadboardDetailPage({ entry }) {
               </ul>
             )}
 
-            {/* ADD TO CART */}
-            <button
-              className="sd-add-btn"
-              onClick={handleAddToCart}
-              disabled={!item.inStock}
-            >
-              {item.inStock ? "Add to Cart" : "Out of Stock"}
-            </button>
+            {/* ADD TO CART + LIKE */}
+
+            <div className="sd-action-row">
+              <button
+                type="button"
+                className="sd-add-btn sd-cart-action"
+                onClick={handleAddToCart}
+                disabled={!item.inStock}
+              >
+                {item.inStock
+                  ? "Add to Cart"
+                  : "Out of Stock"}
+              </button>
+
+              <button
+                type="button"
+                className={`sd-like-btn ${
+                  isLiked ? "is-liked" : ""
+                } ${
+                  heartAnimating
+                    ? "is-animating"
+                    : ""
+                }`}
+                onClick={handleToggleLike}
+                disabled={
+                  loadingLike ||
+                  savingLike ||
+                  status === "loading"
+                }
+                aria-label={
+                  isLiked
+                    ? "Remove from likes"
+                    : "Add to likes"
+                }
+                aria-pressed={isLiked}
+                title={
+                  isLiked
+                    ? "Remove from likes"
+                    : "Add to likes"
+                }
+              >
+                {savingLike ? (
+                  <span className="sd-like-spinner" />
+                ) : (
+                  <span className="sd-like-icon">
+                    <HeartIcon filled={isLiked} />
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* SAVED TO LIKES */}
+
+            {isLiked && !loadingLike && (
+              <p className="sd-saved-text">
+                <HeartIcon filled />
+                Saved to your likes
+                <Link href="/likes">
+                  View likes
+                </Link>
+              </p>
+            )}
           </div>
         </div>
       </main>
 
       <CartDrawer />
       <Footer />
+
+      {/* ============================================
+          COMPLETE BUTTON + NOTIFICATION STYLING
+          NO EXTERNAL BUTTON SCSS REQUIRED
+      ============================================ */}
+
+      <style jsx global>{`
+        /* =====================================
+           ACTION ROW
+        ===================================== */
+
+        html body .headboard-product-info .sd-action-row {
+          display: grid !important;
+          grid-template-columns:
+            minmax(0, 1fr) 60px !important;
+          align-items: stretch !important;
+          justify-content: stretch !important;
+          gap: 12px !important;
+
+          width: 100% !important;
+          max-width: 100% !important;
+          margin: 24px 0 0 !important;
+          padding: 0 !important;
+          box-sizing: border-box !important;
+        }
+
+        /* =====================================
+           ADD TO CART BUTTON
+        ===================================== */
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-cart-action {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+
+          flex: none !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          max-width: none !important;
+
+          height: 60px !important;
+          min-height: 60px !important;
+
+          margin: 0 !important;
+          padding: 0 16px !important;
+
+          background-color: #8B3F1F !important;
+          background-image: none !important;
+          color: #ffffff !important;
+
+          border: 1px solid #8B3F1F !important;
+          border-radius: 0 !important;
+
+          font-family: inherit !important;
+          font-size: 14px !important;
+          font-weight: 500 !important;
+          line-height: 1.2 !important;
+          letter-spacing: 1px !important;
+          text-align: center !important;
+          text-transform: uppercase !important;
+
+          box-shadow: none !important;
+          transform: none !important;
+
+          cursor: pointer !important;
+          box-sizing: border-box !important;
+
+          transition:
+            background-color 0.25s ease,
+            border-color 0.25s ease !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-cart-action:hover:not(:disabled) {
+          background-color: #6F3017 !important;
+          border-color: #6F3017 !important;
+          color: #ffffff !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-cart-action:disabled {
+          background-color: #c8b7ad !important;
+          border-color: #c8b7ad !important;
+          color: #ffffff !important;
+          cursor: not-allowed !important;
+        }
+
+        /* =====================================
+           LIKE BUTTON
+        ===================================== */
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-like-btn {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+
+          flex: none !important;
+
+          width: 60px !important;
+          min-width: 60px !important;
+          max-width: 60px !important;
+
+          height: 60px !important;
+          min-height: 60px !important;
+
+          margin: 0 !important;
+          padding: 0 !important;
+
+          background-color: #ffffff !important;
+          background-image: none !important;
+
+          border: 1px solid #8B3F1F !important;
+          border-radius: 0 !important;
+
+          box-shadow: none !important;
+          transform: none !important;
+
+          cursor: pointer !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          box-sizing: border-box !important;
+
+          transition:
+            background-color 0.25s ease,
+            border-color 0.25s ease !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-like-btn:hover:not(:disabled) {
+          background-color: #f8eee8 !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-like-btn.is-liked {
+          background-color: #f8eee8 !important;
+          border-color: #8B3F1F !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row button.sd-like-btn:disabled {
+          cursor: wait !important;
+        }
+
+        /* =====================================
+           HEART ICON
+        ===================================== */
+
+        html body .headboard-product-info
+        .sd-action-row .sd-like-icon {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+
+          width: 24px !important;
+          height: 24px !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row .sd-like-icon svg {
+          display: block !important;
+          width: 24px !important;
+          height: 24px !important;
+          stroke: #8B3F1F !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row .sd-like-btn.is-liked svg {
+          fill: #8B3F1F !important;
+          stroke: #8B3F1F !important;
+        }
+
+        html body .headboard-product-info
+        .sd-action-row .sd-like-btn:not(.is-liked) svg {
+          fill: none !important;
+          stroke: #8B3F1F !important;
+        }
+
+        /* =====================================
+           LOADING SPINNER
+        ===================================== */
+
+        html body .headboard-product-info
+        .sd-action-row .sd-like-spinner {
+          width: 22px !important;
+          height: 22px !important;
+
+          border: 2px solid #e4d3c9 !important;
+          border-top-color: #8B3F1F !important;
+          border-radius: 50% !important;
+
+          animation:
+            headboard-spin 0.7s linear infinite;
+        }
+
+        @keyframes headboard-spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        /* =====================================
+           HEART ANIMATION
+        ===================================== */
+
+        .headboard-product-info
+        .sd-like-btn.is-animating
+        .sd-like-icon {
+          animation:
+            headboard-heart-pop 0.5s ease;
+        }
+
+        @keyframes headboard-heart-pop {
+          0% {
+            transform: scale(1);
+          }
+
+          30% {
+            transform: scale(1.4);
+          }
+
+          55% {
+            transform: scale(0.85);
+          }
+
+          100% {
+            transform: scale(1);
+          }
+        }
+
+        /* =====================================
+           SAVED MESSAGE
+        ===================================== */
+
+        html body .headboard-product-info .sd-saved-text {
+          display: flex !important;
+          align-items: center !important;
+          flex-wrap: wrap !important;
+          gap: 8px !important;
+
+          margin-top: 13px !important;
+          color: #8B3F1F !important;
+          font-size: 13px !important;
+        }
+
+        html body .headboard-product-info
+        .sd-saved-text svg {
+          width: 15px !important;
+          height: 15px !important;
+          fill: #8B3F1F !important;
+          stroke: #8B3F1F !important;
+        }
+
+        html body .headboard-product-info
+        .sd-saved-text a {
+          color: #8B3F1F !important;
+          text-decoration: underline !important;
+          text-underline-offset: 3px;
+        }
+
+        /* =====================================
+           TOAST NOTIFICATIONS
+        ===================================== */
+
+        .norden-toast {
+          position: fixed;
+          top: 125px;
+          right: 25px;
+          z-index: 99999;
+
+          width: min(390px, calc(100vw - 32px));
+
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+
+          padding: 19px 18px 22px;
+
+          background: #fbf9f4;
+          border: 1px solid #e9e2d8;
+
+          box-shadow:
+            0 12px 40px rgba(32, 20, 20, 0.12);
+
+          overflow: hidden;
+
+          animation:
+            headboard-toast-enter 0.35s ease both;
+        }
+
+        .norden-toast__icon {
+          width: 39px;
+          height: 39px;
+          flex-shrink: 0;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          border-radius: 50%;
+          background: #f8eee8;
+
+          color: #8B3F1F;
+          font-size: 23px;
+        }
+
+        .norden-toast--removed
+        .norden-toast__icon {
+          background: #eeeae4;
+          color: #514b45;
+        }
+
+        .norden-toast--error
+        .norden-toast__icon {
+          background: #fbe7e7;
+          color: #b91c1c;
+        }
+
+        .norden-toast__content {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .norden-toast__content strong {
+          display: block;
+          font-family: "Radley", Georgia, serif;
+          font-size: 17px;
+          font-weight: 400;
+          color: #292523;
+          margin-bottom: 5px;
+        }
+
+        .norden-toast__content p {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.6;
+          color: #77716c;
+        }
+
+        .norden-toast__content a {
+          display: inline-block;
+          margin-top: 9px;
+          font-size: 12px;
+          color: #8B3F1F;
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
+
+        .norden-toast__close {
+          flex-shrink: 0;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
+          color: #77716c;
+        }
+
+        .norden-toast__progress {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 3px;
+          width: 100%;
+          background: #8B3F1F;
+          transform-origin: left;
+
+          animation:
+            headboard-toast-progress
+            3.5s linear forwards;
+        }
+
+        .norden-toast--removed
+        .norden-toast__progress {
+          background: #aaa198;
+        }
+
+        .norden-toast--error
+        .norden-toast__progress {
+          background: #b91c1c;
+        }
+
+        @keyframes headboard-toast-enter {
+          from {
+            opacity: 0;
+            transform: translateX(35px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes headboard-toast-progress {
+          from {
+            transform: scaleX(1);
+          }
+
+          to {
+            transform: scaleX(0);
+          }
+        }
+
+        /* =====================================
+           NO IMAGE PLACEHOLDER
+        ===================================== */
+
+        .headboard-no-image {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          color: #999;
+          font-size: 14px;
+        }
+
+        /* =====================================
+           TABLET
+        ===================================== */
+
+        @media (max-width: 1024px) {
+          html body .headboard-product-info
+          .sd-action-row {
+            grid-template-columns:
+              minmax(0, 1fr) 56px !important;
+            gap: 10px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row button.sd-cart-action {
+            height: 56px !important;
+            min-height: 56px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row button.sd-like-btn {
+            width: 56px !important;
+            min-width: 56px !important;
+            max-width: 56px !important;
+            height: 56px !important;
+            min-height: 56px !important;
+          }
+        }
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 600px) {
+          html body .headboard-product-info
+          .sd-action-row {
+            display: grid !important;
+            grid-template-columns:
+              minmax(0, 1fr) 52px !important;
+            gap: 10px !important;
+
+            width: 100% !important;
+            margin-top: 20px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row button.sd-cart-action {
+            width: 100% !important;
+            min-width: 0 !important;
+            height: 52px !important;
+            min-height: 52px !important;
+            padding: 0 10px !important;
+            font-size: 12px !important;
+            letter-spacing: 0.7px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row button.sd-like-btn {
+            width: 52px !important;
+            min-width: 52px !important;
+            max-width: 52px !important;
+            height: 52px !important;
+            min-height: 52px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row .sd-like-icon svg {
+            width: 22px !important;
+            height: 22px !important;
+          }
+
+          .norden-toast {
+            top: 85px;
+            right: 16px;
+            padding: 16px 15px 20px;
+          }
+        }
+
+        /* =====================================
+           SMALL PHONES
+        ===================================== */
+
+        @media (max-width: 360px) {
+          html body .headboard-product-info
+          .sd-action-row {
+            grid-template-columns:
+              minmax(0, 1fr) 48px !important;
+            gap: 8px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row button.sd-cart-action {
+            height: 48px !important;
+            min-height: 48px !important;
+            font-size: 11px !important;
+          }
+
+          html body .headboard-product-info
+          .sd-action-row button.sd-like-btn {
+            width: 48px !important;
+            min-width: 48px !important;
+            max-width: 48px !important;
+            height: 48px !important;
+            min-height: 48px !important;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .headboard-product-info
+          .sd-like-btn.is-animating
+          .sd-like-icon,
+          .norden-toast,
+          .norden-toast__progress {
+            animation: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

@@ -11,8 +11,6 @@ const menuItems = [
   { name: "My Account", href: "/account", icon: "user" },
   { name: "My Orders", href: "/orders", icon: "package" },
   { name: "My Likes", href: "/likes", icon: "heart" },
-  { name: "Recently Viewed", href: "/recently-viewed", icon: "clock" },
-  { name: "My Addresses", href: "/account/addresses", icon: "pin" },
   { name: "Help & Support", href: "/contact", icon: "help" },
 ];
 
@@ -32,12 +30,6 @@ function Icon({ name, size = 20 }) {
     ),
     heart: (
       <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
-    ),
-    clock: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
-      </>
     ),
     pin: (
       <>
@@ -302,19 +294,7 @@ export default function Account() {
                         href="/likes"
                       />
 
-                      <QuickCard
-                        icon="pin"
-                        title="My Addresses"
-                        description="Manage your preferred delivery addresses."
-                        href="/account/addresses"
-                      />
-
-                      <QuickCard
-                        icon="clock"
-                        title="Recently Viewed"
-                        description="Return to pieces that caught your eye."
-                        href="/recently-viewed"
-                      />
+                  
                     </div>
                   </section>
 
@@ -324,7 +304,6 @@ export default function Account() {
                       <span className="account-eyebrow">
                         HERE TO HELP
                       </span>
-
 
                       <h2>Need a little assistance?</h2>
 

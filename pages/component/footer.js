@@ -40,7 +40,7 @@ const COLUMNS = [
     links: [
       { label: "Our Story", href: "/about" },
       { label: "Blog", href: "/blog" },
-      { label: "Career", href: "/areer" },
+      { label: "Career", href: "/career" },
       { label: "Delivery", href: "/delivery" },
       { label: "Ambassador", href: "/ambassdor" },
       { label: "Affilate", href: "/affliate" },
@@ -533,7 +533,7 @@ export default function Footer() {
         ========================= */}
 
         <div className="footer_col footer_newsletter">
-          <h4 className="footer_heading">The language of space</h4>
+          <h4 className="footer_heading">Get Early access</h4>
 
           <div className="footer_email">
             <input

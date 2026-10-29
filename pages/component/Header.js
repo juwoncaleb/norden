@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -83,17 +82,14 @@ const PROFILE_LINKS = [
   { label: "My Likes", href: "/likes", icon: "heart" },
   { label: "My Orders", href: "/orders", icon: "package" },
   {
-    label: "Recently Viewed",
-    href: "/recently-viewed",
-    icon: "clock",
-  },
-  {
     label: "My Addresses",
     href: "/account/addresses",
     icon: "pin",
   },
   { label: "Help & Support", href: "/contact", icon: "help" },
 ];
+
+const DESKTOP_QUERY = "(min-width: 1241px)";
 
 // ============================================
 // ICONS
@@ -127,12 +123,6 @@ function Icon({ name, size = 23 }) {
       <>
         <path d="m3 7 9-4 9 4v10l-9 4-9-4V7Z" />
         <path d="m3 7 9 4 9-4M12 11v10" />
-      </>
-    ),
-    clock: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
       </>
     ),
     pin: (
@@ -204,24 +194,19 @@ function GoogleIcon() {
 }
 
 // ============================================
-// HELPERS
+// SEARCH HELPERS
 // ============================================
 
 function formatPrice(value) {
   if (value == null || value === "") return null;
 
   const number = Number(value);
-
   if (!Number.isFinite(number)) return null;
 
   return `₦${number.toLocaleString("en-NG", {
     maximumFractionDigits: 0,
   })}`;
 }
-
-// ============================================
-// SEARCH PANEL
-// ============================================
 
 function SearchPanel({
   query,
@@ -235,7 +220,7 @@ function SearchPanel({
   const hasQuery = query.trim().length >= 2;
 
   return (
-    <div className="header_search_popover">
+    <div className="header_search_popover" role="search">
       <div className="header_search_form">
         <Icon name="search" size={19} />
 
@@ -253,14 +238,7 @@ function SearchPanel({
           type="button"
           className="search_close"
           aria-label="Close search"
-          onClick={() => {
-            if (query) {
-              setQuery("");
-              inputRef.current?.focus();
-            } else {
-              close();
-            }
-          }}
+          onClick={close}
         >
           <Icon name="close" size={17} />
         </button>
@@ -323,9 +301,7 @@ function SearchPanel({
                     </span>
 
                     <span className="search_result_category">
-                      {String(
-                        product.category || "Furniture"
-                      )
+                      {String(product.category || "Furniture")
                         .replace(/([a-z])([A-Z])/g, "$1 $2")
                         .replace(/[-_]/g, " ")}
                     </span>
@@ -362,7 +338,7 @@ function SearchPanel({
 }
 
 // ============================================
-// PROFILE BUTTON
+// ACCOUNT BUTTON
 // ============================================
 
 function ProfileButton({
@@ -386,10 +362,7 @@ function ProfileButton({
     document.addEventListener("mousedown", handleOutside);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleOutside
-      );
+      document.removeEventListener("mousedown", handleOutside);
     };
   }, [isOpen, setIsOpen]);
 
@@ -402,15 +375,13 @@ function ProfileButton({
       onMouseEnter={() => {
         if (
           session &&
-          window.matchMedia("(min-width: 1101px)").matches
+          window.matchMedia(DESKTOP_QUERY).matches
         ) {
           setIsOpen(true);
         }
       }}
       onMouseLeave={() => {
-        if (
-          window.matchMedia("(min-width: 1101px)").matches
-        ) {
+        if (window.matchMedia(DESKTOP_QUERY).matches) {
           setIsOpen(false);
         }
       }}
@@ -418,12 +389,8 @@ function ProfileButton({
       <button
         type="button"
         className="header_account_button"
-        aria-label={
-          session ? "Account menu" : "Sign in"
-        }
-        aria-expanded={
-          session ? isOpen : undefined
-        }
+        aria-label={session ? "Account menu" : "Sign in"}
+        aria-expanded={session ? isOpen : undefined}
         onClick={() => {
           if (!session) {
             openLogin();
@@ -448,8 +415,7 @@ function ProfileButton({
         <div className="header_profile_dropdown">
           <div className="header_profile_identity">
             <strong>
-              {session.user?.name ||
-                "NÓRDEN Customer"}
+              {session.user?.name || "NÓRDEN Customer"}
             </strong>
             <span>{session.user?.email}</span>
           </div>
@@ -504,12 +470,29 @@ function CartButton({ count, onClick }) {
 }
 
 // ============================================
+// LIKE BUTTON
+// ============================================
+
+function LikeButton({ onClick }) {
+  return (
+    <Link
+      href="/likes"
+      className="header_like_button"
+      aria-label="My Likes"
+      title="My Likes"
+      onClick={onClick}
+    >
+      <Icon name="heart" size={24} />
+    </Link>
+  );
+}
+
+// ============================================
 // MAIN HEADER
 // ============================================
 
 export default function Header() {
   const router = useRouter();
-
   const { data: session, status } = useSession();
 
   const cartItems = useCartStore(
@@ -517,60 +500,31 @@ export default function Header() {
   );
 
   const [hydrated, setHydrated] = useState(false);
-
   const [openMenu, setOpenMenu] = useState(null);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
-
   const [accordion, setAccordion] = useState(null);
 
   const [searchOpen, setSearchOpen] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(false);
 
-  const [searchResults, setSearchResults] =
-    useState([]);
-
-  const [searchLoading, setSearchLoading] =
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [desktopProfileOpen, setDesktopProfileOpen] =
+    useState(false);
+  const [mobileProfileOpen, setMobileProfileOpen] =
     useState(false);
 
-  const [searchError, setSearchError] =
-    useState(false);
-
-  const [accountOpen, setAccountOpen] =
-    useState(false);
-
-  // Separate desktop and mobile profile states
-  const [
-    desktopProfileOpen,
-    setDesktopProfileOpen,
-  ] = useState(false);
-
-  const [
-    mobileProfileOpen,
-    setMobileProfileOpen,
-  ] = useState(false);
-
-  const [pageLoading, setPageLoading] =
-    useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
 
   const searchRef = useRef(null);
-
   const mobileSearchRef = useRef(null);
-
   const desktopSearchInputRef = useRef(null);
-
   const mobileSearchInputRef = useRef(null);
-
   const modalCloseRef = useRef(null);
-
   const menuTimer = useRef(null);
-
   const loadingTimer = useRef(null);
-
-  // ============================================
-  // CART HYDRATION
-  // ============================================
 
   useEffect(() => {
     setHydrated(true);
@@ -590,10 +544,12 @@ export default function Header() {
       : 0;
 
   // ============================================
-  // CLOSE ALL PANELS
+  // HEADER ACTIONS
   // ============================================
 
   function closeAll() {
+    clearTimeout(menuTimer.current);
+
     setOpenMenu(null);
     setDrawerOpen(false);
     setAccordion(null);
@@ -601,6 +557,11 @@ export default function Header() {
     setAccountOpen(false);
     setDesktopProfileOpen(false);
     setMobileProfileOpen(false);
+  }
+
+  function closeSearch() {
+    setSearchOpen(false);
+    setSearchQuery("");
   }
 
   function openLogin() {
@@ -627,7 +588,7 @@ export default function Header() {
   }
 
   // ============================================
-  // PRODUCT SEARCH
+  // LIVE SEARCH
   // ============================================
 
   useEffect(() => {
@@ -649,9 +610,7 @@ export default function Header() {
       try {
         const response = await fetch(
           `/api/search?q=${encodeURIComponent(query)}`,
-          {
-            signal: controller.signal,
-          }
+          { signal: controller.signal }
         );
 
         if (!response.ok) {
@@ -686,29 +645,30 @@ export default function Header() {
     };
   }, [searchQuery, searchOpen]);
 
-  // Focus the visible search input
+  // ============================================
+  // FOCUS SEARCH
+  // ============================================
+
   useEffect(() => {
     if (!searchOpen) return;
 
-    const focusVisibleInput = () => {
-      const isDesktop = window.matchMedia(
-        "(min-width: 1101px)"
-      ).matches;
+    const timer = setTimeout(() => {
+      const desktop = window
+        .matchMedia(DESKTOP_QUERY)
+        .matches;
 
-      if (isDesktop) {
+      if (desktop) {
         desktopSearchInputRef.current?.focus();
       } else {
         mobileSearchInputRef.current?.focus();
       }
-    };
-
-    const timer = setTimeout(focusVisibleInput, 0);
+    }, 0);
 
     return () => clearTimeout(timer);
   }, [searchOpen]);
 
   // ============================================
-  // ESCAPE AND OUTSIDE CLICK
+  // CLOSE ON ESCAPE / OUTSIDE CLICK
   // ============================================
 
   useEffect(() => {
@@ -719,33 +679,28 @@ export default function Header() {
     }
 
     function handleOutside(event) {
-      const clickedDesktopSearch =
+      const insideDesktop =
         searchRef.current?.contains(event.target);
 
-      const clickedMobileSearch =
+      const insideMobile =
         mobileSearchRef.current?.contains(
           event.target
         );
 
-      const clickedSearchButton =
-        event.target.closest(
-          ".mobile_search_button"
-        );
+      const searchButton = event.target.closest(
+        ".mobile_search_button, .header_search_button"
+      );
 
       if (
-        !clickedDesktopSearch &&
-        !clickedMobileSearch &&
-        !clickedSearchButton
+        !insideDesktop &&
+        !insideMobile &&
+        !searchButton
       ) {
         setSearchOpen(false);
       }
     }
 
-    document.addEventListener(
-      "keydown",
-      handleEscape
-    );
-
+    document.addEventListener("keydown", handleEscape);
     document.addEventListener(
       "mousedown",
       handleOutside
@@ -756,7 +711,6 @@ export default function Header() {
         "keydown",
         handleEscape
       );
-
       document.removeEventListener(
         "mousedown",
         handleOutside
@@ -765,7 +719,7 @@ export default function Header() {
   }, []);
 
   // ============================================
-  // ROUTE LOADING
+  // PAGE LOADING
   // ============================================
 
   useEffect(() => {
@@ -783,12 +737,7 @@ export default function Header() {
         setPageLoading(true);
       }, 150);
 
-      setOpenMenu(null);
-      setDrawerOpen(false);
-      setSearchOpen(false);
-      setDesktopProfileOpen(false);
-      setMobileProfileOpen(false);
-      setAccountOpen(false);
+      closeAll();
     }
 
     function end() {
@@ -796,106 +745,63 @@ export default function Header() {
       setPageLoading(false);
     }
 
-    router.events.on(
-      "routeChangeStart",
-      start
-    );
-
-    router.events.on(
-      "routeChangeComplete",
-      end
-    );
-
-    router.events.on(
-      "routeChangeError",
-      end
-    );
+    router.events.on("routeChangeStart", start);
+    router.events.on("routeChangeComplete", end);
+    router.events.on("routeChangeError", end);
 
     return () => {
       clearTimeout(loadingTimer.current);
 
-      router.events.off(
-        "routeChangeStart",
-        start
-      );
-
-      router.events.off(
-        "routeChangeComplete",
-        end
-      );
-
-      router.events.off(
-        "routeChangeError",
-        end
-      );
+      router.events.off("routeChangeStart", start);
+      router.events.off("routeChangeComplete", end);
+      router.events.off("routeChangeError", end);
     };
   }, [router]);
 
   // ============================================
-  // RESPONSIVE STATE
+  // RESPONSIVE MENU RESET
   // ============================================
 
   useEffect(() => {
-    const media = window.matchMedia(
-      "(min-width: 1101px)"
-    );
+    const media = window.matchMedia(DESKTOP_QUERY);
 
-    function onChange(event) {
+    function onChange() {
       setDesktopProfileOpen(false);
       setMobileProfileOpen(false);
       setSearchOpen(false);
-
-      if (event.matches) {
-        setDrawerOpen(false);
-      }
+      setDrawerOpen(false);
+      setOpenMenu(null);
     }
 
     if (media.addEventListener) {
-      media.addEventListener(
-        "change",
-        onChange
-      );
+      media.addEventListener("change", onChange);
 
       return () => {
-        media.removeEventListener(
-          "change",
-          onChange
-        );
+        media.removeEventListener("change", onChange);
       };
     }
 
-    // Older browser fallback
     media.addListener(onChange);
 
-    return () => {
-      media.removeListener(onChange);
-    };
+    return () => media.removeListener(onChange);
   }, []);
 
   // ============================================
-  // BODY SCROLL LOCK
+  // PREVENT SCROLL WHEN DRAWER/MODAL OPEN
   // ============================================
 
   useEffect(() => {
-    if (!drawerOpen && !accountOpen) {
-      return;
-    }
+    if (!drawerOpen && !accountOpen) return;
 
     const previous =
       document.body.style.overflow;
 
-    document.body.style.overflow =
-      "hidden";
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow =
-        previous;
+      document.body.style.overflow = previous;
     };
   }, [drawerOpen, accountOpen]);
-
-  // ============================================
-  // LOGIN MODAL FOCUS
-  // ============================================
 
   useEffect(() => {
     if (accountOpen) {
@@ -903,36 +809,13 @@ export default function Header() {
     }
   }, [accountOpen]);
 
-  // ============================================
-  // SHARED PROPS
-  // ============================================
-
   const commonSearchProps = {
     query: searchQuery,
     setQuery: setSearchQuery,
     results: searchResults,
     loading: searchLoading,
     error: searchError,
-    close: () => {
-      setSearchOpen(false);
-      setSearchQuery("");
-    },
-  };
-
-  const desktopProfileProps = {
-    session,
-    isOpen: desktopProfileOpen,
-    setIsOpen: setDesktopProfileOpen,
-    openLogin,
-    logout: handleLogout,
-  };
-
-  const mobileProfileProps = {
-    session,
-    isOpen: mobileProfileOpen,
-    setIsOpen: setMobileProfileOpen,
-    openLogin,
-    logout: handleLogout,
+    close: closeSearch,
   };
 
   // ============================================
@@ -941,7 +824,7 @@ export default function Header() {
 
   return (
     <div className="header_wrapper">
-      {/* PAGE LOADING INDICATOR */}
+      {/* PAGE LOADER */}
 
       {pageLoading && (
         <div
@@ -955,11 +838,9 @@ export default function Header() {
         </div>
       )}
 
-      {/* MAIN HEADER */}
+      {/* HEADER */}
 
       <header className="header_div">
-        {/* LOGO AND DESKTOP NAVIGATION */}
-
         <div className="header_left">
           <Link
             href="/"
@@ -972,6 +853,8 @@ export default function Header() {
               className="modo_logo"
             />
           </Link>
+
+          {/* DESKTOP NAVIGATION */}
 
           <nav
             className="desktop_nav"
@@ -993,23 +876,16 @@ export default function Header() {
                 key={menu.label}
                 className="nav_item"
                 onMouseEnter={() => {
-                  clearTimeout(
-                    menuTimer.current
-                  );
-
-                  setOpenMenu(
-                    menu.label
-                  );
+                  clearTimeout(menuTimer.current);
+                  setOpenMenu(menu.label);
                 }}
                 onMouseLeave={() => {
-                  clearTimeout(
-                    menuTimer.current
-                  );
+                  clearTimeout(menuTimer.current);
 
-                  menuTimer.current =
-                    setTimeout(() => {
-                      setOpenMenu(null);
-                    }, 120);
+                  menuTimer.current = setTimeout(
+                    () => setOpenMenu(null),
+                    120
+                  );
                 }}
               >
                 <button
@@ -1031,21 +907,19 @@ export default function Header() {
 
                 {openMenu === menu.label && (
                   <ul className="dropdown_panel">
-                    {menu.items.map(
-                      (item) => (
-                        <li
-                          key={`${menu.label}-${item.href}-${item.label}`}
+                    {menu.items.map((item) => (
+                      <li
+                        key={`${menu.label}-${item.href}-${item.label}`}
+                      >
+                        <Link
+                          href={item.href}
+                          className="dropdown_link"
+                          onClick={closeAll}
                         >
-                          <Link
-                            href={item.href}
-                            className="dropdown_link"
-                            onClick={closeAll}
-                          >
-                            {item.label}
-                          </Link>
-                        </li>
-                      )
-                    )}
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
@@ -1053,7 +927,10 @@ export default function Header() {
           </nav>
         </div>
 
-        {/* DESKTOP ACTIONS */}
+        {/* =====================================
+            DESKTOP ACTIONS
+            SEARCH - ACCOUNT - LIKE - CART
+        ===================================== */}
 
         <div className="desktop_actions">
           <div
@@ -1063,28 +940,30 @@ export default function Header() {
             <button
               type="button"
               className="header_search_button"
-              aria-label="Search"
+              aria-label="Search products"
               aria-expanded={searchOpen}
               onClick={toggleSearch}
             >
-              <Icon name="search" />
+              <Icon name="search" size={23} />
             </button>
 
             {searchOpen && (
-              <div className="desktop_search_only">
-                <SearchPanel
-                  {...commonSearchProps}
-                  inputRef={
-                    desktopSearchInputRef
-                  }
-                />
-              </div>
+              <SearchPanel
+                {...commonSearchProps}
+                inputRef={desktopSearchInputRef}
+              />
             )}
           </div>
 
           <ProfileButton
-            {...desktopProfileProps}
+            session={session}
+            isOpen={desktopProfileOpen}
+            setIsOpen={setDesktopProfileOpen}
+            openLogin={openLogin}
+            logout={handleLogout}
           />
+
+          <LikeButton onClick={closeAll} />
 
           <CartButton
             count={cartCount}
@@ -1092,22 +971,31 @@ export default function Header() {
           />
         </div>
 
-        {/* MOBILE ACTIONS */}
+        {/* =====================================
+            MOBILE ACTIONS
+            SEARCH - ACCOUNT - LIKE - CART - MENU
+        ===================================== */}
 
         <div className="mobile_header_actions">
           <button
             type="button"
             className="mobile_search_button"
-            aria-label="Search"
+            aria-label="Search products"
             aria-expanded={searchOpen}
             onClick={toggleSearch}
           >
-            <Icon name="search" />
+            <Icon name="search" size={22} />
           </button>
 
           <ProfileButton
-            {...mobileProfileProps}
+            session={session}
+            isOpen={mobileProfileOpen}
+            setIsOpen={setMobileProfileOpen}
+            openLogin={openLogin}
+            logout={handleLogout}
           />
+
+          <LikeButton onClick={closeAll} />
 
           <CartButton
             count={cartCount}
@@ -1117,12 +1005,10 @@ export default function Header() {
           <button
             type="button"
             className="mobile_toggle"
-            aria-label="Open menu"
+            aria-label="Open navigation"
             aria-expanded={drawerOpen}
             onClick={() => {
               setSearchOpen(false);
-              setDesktopProfileOpen(false);
-              setMobileProfileOpen(false);
               setDrawerOpen(true);
             }}
           >
@@ -1141,84 +1027,182 @@ export default function Header() {
           >
             <SearchPanel
               {...commonSearchProps}
-              inputRef={
-                mobileSearchInputRef
-              }
+              inputRef={mobileSearchInputRef}
             />
           </div>
         )}
       </header>
 
-      {/* ======================================
-          ACCOUNT MODAL
-      ====================================== */}
+      {/* MOBILE DRAWER BACKDROP */}
+
+      <div
+        className={`drawer_backdrop ${
+          drawerOpen ? "is_open" : ""
+        }`}
+        onClick={() => setDrawerOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* MOBILE DRAWER */}
+
+      <aside
+        className={`mobile_drawer ${
+          drawerOpen ? "is_open" : ""
+        }`}
+        aria-label="Mobile navigation"
+        aria-hidden={!drawerOpen}
+        inert={!drawerOpen}
+      >
+        <div className="drawer_top">
+          <Link href="/" onClick={closeAll}>
+            <img
+              src="/norden.png"
+              alt="NÓRDEN"
+              className="modo_logo"
+            />
+          </Link>
+
+          <button
+            type="button"
+            className="drawer_close"
+            aria-label="Close navigation"
+            onClick={() => setDrawerOpen(false)}
+          >
+            <Icon name="close" />
+          </button>
+        </div>
+
+        <nav className="drawer_nav">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="drawer_row"
+              onClick={closeAll}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          {MENU.map((menu) => (
+            <div
+              key={menu.label}
+              className="drawer_group"
+            >
+              <button
+                type="button"
+                className="drawer_row"
+                aria-expanded={
+                  accordion === menu.label
+                }
+                onClick={() => {
+                  setAccordion(
+                    accordion === menu.label
+                      ? null
+                      : menu.label
+                  );
+                }}
+              >
+                <span>{menu.label}</span>
+
+                <span
+                  className={`chevron ${
+                    accordion === menu.label
+                      ? "is_open"
+                      : ""
+                  }`}
+                />
+              </button>
+
+              {accordion === menu.label && (
+                <ul className="drawer_sub">
+                  {menu.items.map((item) => (
+                    <li
+                      key={`${menu.label}-${item.href}`}
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={closeAll}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        <div className="drawer_footer">
+          <button
+            type="button"
+            className="drawer_checkout"
+            onClick={handleCheckout}
+          >
+            <Icon name="cart" size={19} />
+            View Cart ({cartCount})
+          </button>
+        </div>
+      </aside>
+
+      {/* =====================================
+          GOOGLE ACCOUNT MODAL
+      ===================================== */}
 
       {accountOpen && (
         <div
           className="account_modal_backdrop"
           onMouseDown={(event) => {
             if (
-              event.target ===
-              event.currentTarget
+              event.target === event.currentTarget
             ) {
               setAccountOpen(false);
             }
           }}
         >
-          <section
+          <div
             className="account_modal"
             role="dialog"
             aria-modal="true"
-            aria-label="NÓRDEN account"
+            aria-labelledby="account-modal-title"
           >
             <button
-              type="button"
               ref={modalCloseRef}
+              type="button"
               className="account_modal_close"
               aria-label="Close"
-              onClick={() =>
-                setAccountOpen(false)
-              }
+              onClick={() => setAccountOpen(false)}
             >
               <Icon name="close" />
             </button>
 
+            <span className="account_eyebrow">
+              WELCOME TO NÓRDEN
+            </span>
+
             {status === "loading" ? (
               <div className="account_loading">
-                <span className="account_spinner" />
-                <p>
-                  Loading your account...
-                </p>
+                <div className="account_spinner" />
+                Loading your account...
               </div>
             ) : session ? (
               <div className="account_logged_in">
                 <div className="account_profile_avatar">
                   {session.user?.image ? (
                     <img
-                      src={
-                        session.user.image
-                      }
+                      src={session.user.image}
                       alt=""
-                      referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <Icon
-                      name="user"
-                      size={30}
-                    />
+                    <Icon name="user" size={32} />
                   )}
                 </div>
 
-                <span className="account_eyebrow">
-                  YOUR NÓRDEN ACCOUNT
-                </span>
-
-                <h2>Welcome back</h2>
-
-                <h3>
+                <h2 id="account-modal-title">
                   {session.user?.name ||
-                    "Customer"}
-                </h3>
+                    "Your Account"}
+                </h2>
 
                 <p className="account_email">
                   {session.user?.email}
@@ -1233,209 +1217,136 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              <div className="account_logged_out">
-                <span className="account_eyebrow">
-                  THE NÓRDEN EXPERIENCE
-                </span>
-
-                <h2>
-                  Welcome to NÓRDEN
+              <>
+                <h2 id="account-modal-title">
+                  Your space, your NÓRDEN.
                 </h2>
 
                 <p className="account_description">
-                  Sign in to save the
-                  pieces you love, manage
-                  your account and enjoy a
-                  more personal shopping
-                  experience.
+                  Sign in to save your favourite
+                  pieces, manage your account and
+                  explore your orders.
                 </p>
 
                 <button
                   type="button"
                   className="account_google_button"
-                  onClick={() =>
-                    signIn("google", {
-                      callbackUrl:
-                        router.asPath,
-                    })
-                  }
+                  onClick={() => signIn("google")}
                 >
                   <GoogleIcon />
-                  <span>
-                    Continue with Google
-                  </span>
+                  Continue with Google
                 </button>
 
                 <p className="account_disclaimer">
-                  Secure sign-in powered
-                  by Google.
+                  By continuing, you agree to our
+                  terms and privacy policy.
                 </p>
-              </div>
+              </>
             )}
-          </section>
+          </div>
         </div>
       )}
 
-      {/* ======================================
-          MOBILE DRAWER BACKDROP
-      ====================================== */}
-
-      <div
-        className={`drawer_backdrop ${
-          drawerOpen ? "is_open" : ""
-        }`}
-        onClick={() =>
-          setDrawerOpen(false)
-        }
-        aria-hidden="true"
-      />
-
-      {/* ======================================
-          MOBILE NAVIGATION DRAWER
-      ====================================== */}
-
-      <aside
-        className={`mobile_drawer ${
-          drawerOpen ? "is_open" : ""
-        }`}
-        aria-label="Mobile navigation"
-        aria-hidden={!drawerOpen}
-      >
-        <div className="drawer_top">
-          <Link
-            href="/"
-            onClick={closeAll}
-          >
-            <img
-              src="/norden.png"
-              alt="NÓRDEN"
-              className="modo_logo"
-            />
-          </Link>
-
-          <button
-            type="button"
-            className="drawer_close"
-            aria-label="Close menu"
-            onClick={() =>
-              setDrawerOpen(false)
-            }
-          >
-            <Icon name="close" />
-          </button>
-        </div>
-
-        {/* DRAWER NAVIGATION */}
-
-        <nav className="drawer_nav">
-          <ul>
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="drawer_row"
-                  onClick={closeAll}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-
-            {MENU.map((menu) => (
-              <li key={menu.label}>
-                <button
-                  type="button"
-                  className="drawer_row"
-                  aria-expanded={
-                    accordion === menu.label
-                  }
-                  onClick={() => {
-                    setAccordion(
-                      accordion === menu.label
-                        ? null
-                        : menu.label
-                    );
-                  }}
-                >
-                  <span>
-                    {menu.label}
-                  </span>
-
-                  <span
-                    className={`chevron ${
-                      accordion ===
-                      menu.label
-                        ? "is_open"
-                        : ""
-                    }`}
-                  />
-                </button>
-
-                {accordion ===
-                  menu.label && (
-                  <ul className="drawer_sub">
-                    {menu.items.map(
-                      (item) => (
-                        <li
-                          key={`${menu.label}-${item.href}-${item.label}`}
-                        >
-                          <Link
-                            href={
-                              item.href
-                            }
-                            onClick={
-                              closeAll
-                            }
-                          >
-                            {item.label}
-                          </Link>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* DRAWER CHECKOUT */}
-
-        <div className="drawer_footer">
-          <button
-            type="button"
-            className="drawer_checkout"
-            onClick={handleCheckout}
-          >
-            <Icon name="cart" />
-
-            <span>
-              Checkout ({cartCount})
-            </span>
-          </button>
-        </div>
-      </aside>
-
-      {/* ======================================
-          SEARCH RESPONSIVE FIX
-      ====================================== */}
+      {/* =====================================
+          LIKE ICON STYLES
+          EMBEDDED DIRECTLY IN HEADER.JS
+      ===================================== */}
 
       <style jsx global>{`
-        .desktop_search_only {
+        .header_like_button {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 40px;
+          height: 40px;
+          min-width: 40px;
+          flex-shrink: 0;
+          padding: 0;
+          margin: 0;
+          color: #292523;
+          background: transparent;
+          border: none;
+          border-radius: 0;
+          text-decoration: none;
+          cursor: pointer;
+          transition:
+            color 0.25s ease,
+            transform 0.25s ease;
+        }
+
+        .header_like_button svg {
           display: block;
+          width: 24px;
+          height: 24px;
+          stroke: currentColor;
+          fill: none;
+          transition:
+            stroke 0.25s ease,
+            transform 0.25s ease;
         }
 
-        .mobile_search_popover {
-          display: none;
+        .header_like_button:hover {
+          color: #65000b;
         }
 
-        @media (max-width: 1100px) {
-          .desktop_search_only {
-            display: none;
+        .header_like_button:hover svg {
+          transform: scale(1.1);
+        }
+
+        .header_like_button:focus-visible {
+          outline: 2px solid #65000b;
+          outline-offset: 3px;
+        }
+
+        .desktop_actions .header_like_button,
+        .mobile_header_actions .header_like_button {
+          display: inline-flex !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+
+        @media (max-width: 1240px) {
+          .mobile_header_actions .header_like_button {
+            width: 34px;
+            height: 36px;
+            min-width: 34px;
           }
 
-          .mobile_search_popover {
-            display: block;
+          .mobile_header_actions .header_like_button svg {
+            width: 22px;
+            height: 22px;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .mobile_header_actions .header_like_button {
+            width: 30px;
+            height: 34px;
+            min-width: 30px;
+          }
+
+          .mobile_header_actions .header_like_button svg {
+            width: 21px;
+            height: 21px;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .mobile_header_actions .header_like_button {
+            width: 27px;
+            min-width: 27px;
+          }
+
+          .mobile_header_actions .header_like_button svg {
+            width: 19px;
+            height: 19px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .header_like_button,
+          .header_like_button svg {
+            transition: none;
           }
         }
       `}</style>

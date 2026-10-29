@@ -28,6 +28,7 @@
     "@syncfusion/ej2-react-richtexteditor": "^19.4.50",
     "@syncfusion/ej2-react-schedule": "^19.4.50",
     "contentful": "^10.15.1",
+    "contentful-management": "^12.20.0",
     "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.0.2",
     "eslint": "8.45.0",

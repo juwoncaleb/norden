@@ -159,3 +159,279 @@ color: black;
   cursor: pointer;
 }
 .cart-checkout:hover { opacity: 0.85; }
+
+/* ==========================================
+   NORDEN — PRODUCT ACTION BUTTONS
+   PRIMARY COLOR: #8B3F1F
+
+/* ============================================
+   NORDEN — FINAL PRODUCT BUTTON OVERRIDE
+   KEEP THIS AT THE VERY BOTTOM OF GLOBAL SCSS
+============================================ */
+
+/* ADD TO CART + LIKE LAYOUT */
+
+html body div.sd-wrapper div.sd-info div.sd-action-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 60px !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+  flex-direction: unset !important;
+
+  gap: 12px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+
+  margin: 24px 0 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ADD TO CART BUTTON */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-add-btn.sd-cart-action {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  grid-column: 1 !important;
+  flex: unset !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  height: 60px !important;
+  min-height: 60px !important;
+
+  margin: 0 !important;
+  padding: 0 16px !important;
+
+  background: #8B3F1F !important;
+  background-image: none !important;
+  color: #ffffff !important;
+
+  border: 1px solid #8B3F1F !important;
+  border-radius: 0 !important;
+
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+}
+
+/* CART HOVER */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-add-btn.sd-cart-action:hover:not(:disabled) {
+  background: #6F3017 !important;
+  border-color: #6F3017 !important;
+  color: #ffffff !important;
+}
+
+/* CART DISABLED */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-add-btn.sd-cart-action:disabled {
+  background: #c8b7ad !important;
+  border-color: #c8b7ad !important;
+  color: #ffffff !important;
+  cursor: not-allowed !important;
+}
+
+/* LIKE BUTTON */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  grid-column: 2 !important;
+  flex: unset !important;
+
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+
+  height: 60px !important;
+  min-height: 60px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: #ffffff !important;
+  background-image: none !important;
+
+  border: 1px solid #8B3F1F !important;
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+}
+
+/* LIKE HOVER */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn:hover:not(:disabled) {
+  background: #f8eee8 !important;
+}
+
+/* LIKED STATE */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn.is-liked {
+  background: #f8eee8 !important;
+  border-color: #8B3F1F !important;
+}
+
+/* HEART ICON */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn .sd-like-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 24px !important;
+  height: 24px !important;
+}
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn svg {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+
+  stroke: #8B3F1F !important;
+}
+
+/* UNLIKED HEART */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn:not(.is-liked) svg {
+  fill: none !important;
+  stroke: #8B3F1F !important;
+}
+
+/* LIKED HEART */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row button.sd-like-btn.is-liked svg {
+  fill: #8B3F1F !important;
+  stroke: #8B3F1F !important;
+}
+
+/* LOADING SPINNER */
+
+html body div.sd-wrapper div.sd-info
+div.sd-action-row .sd-like-spinner {
+  width: 22px !important;
+  height: 22px !important;
+
+  border: 2px solid #e4d3c9 !important;
+  border-top-color: #8B3F1F !important;
+  border-radius: 50% !important;
+}
+
+/* SAVED MESSAGE */
+
+html body div.sd-wrapper div.sd-info .sd-saved-text {
+  color: #8B3F1F !important;
+}
+
+html body div.sd-wrapper div.sd-info .sd-saved-text svg {
+  fill: #8B3F1F !important;
+  stroke: #8B3F1F !important;
+}
+
+/* TABLET */
+
+@media (max-width: 1024px) {
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row {
+    grid-template-columns: minmax(0, 1fr) 56px !important;
+    gap: 10px !important;
+  }
+
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row button.sd-add-btn.sd-cart-action {
+    height: 56px !important;
+    min-height: 56px !important;
+  }
+
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row button.sd-like-btn {
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row {
+    grid-template-columns: minmax(0, 1fr) 52px !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
+  }
+
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row button.sd-add-btn.sd-cart-action {
+    height: 52px !important;
+    min-height: 52px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.7px !important;
+  }
+
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row button.sd-like-btn {
+    width: 52px !important;
+    min-width: 52px !important;
+    max-width: 52px !important;
+    height: 52px !important;
+    min-height: 52px !important;
+  }
+}
+
+/* SMALL PHONES */
+
+@media (max-width: 360px) {
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row {
+    grid-template-columns: minmax(0, 1fr) 48px !important;
+    gap: 8px !important;
+  }
+
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row button.sd-add-btn.sd-cart-action {
+    height: 48px !important;
+    min-height: 48px !important;
+    font-size: 11px !important;
+  }
+
+  html body div.sd-wrapper div.sd-info
+  div.sd-action-row button.sd-like-btn {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+  }
+}
