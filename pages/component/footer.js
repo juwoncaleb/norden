@@ -17,33 +17,34 @@ const COLUMNS = [
       { label: "Mirrors", href: "/mirrors" },
     ],
   },
-  {
-    title: "Shopping With Us",
-    links: [
-      { label: "The Norden Club", href: "/nordenclub" },
-      { label: "Refer", href: "/refer" },
-      { label: "Product Guarantee", href: "/guarantee" },
+ 
+{
+  title: "Shopping With Us",
+  links: [
+    { label: "The Norden Club", href: "/nordenclub" },
+    { label: "Refer", href: "/refer" },
+    { label: "Product Guarantee", href: "/guarantee" },
+    { label: "Delivery", href: "/delivery" },
 
-      { label: "Signature Headboards", href: "/signature" },
-      { label: "Custom Headboards", href: "/custom" },
-      { label: "Benches", href: "/benches" },
-      { label: "Dressers", href: "/dresser" },
-      { label: "Consoles", href: "/consoles" },
-      { label: "Side Tables", href: "/sidetable" },
-      { label: "Ottomans", href: "/ottomans" },
-      { label: "TV Units", href: "/tvunit" },
-      { label: "Bar & Counter Stools", href: "/bar" },
-    ],
-  },
+    // NEW PAGES
+    { label: "Sales & Refunds", href: "/sales-and-refunds" },
+    { label: "Swatches", href: "/swatches" },
+    { label: "Interior Styling", href: "/interior-styling" },
+    { label: "Customization Service", href: "/customization-service" },
+    { label: "Timeless Travels", href: "/timeless-travels" },
+  ],
+},
+
   {
     title: "About Us",
     links: [
       { label: "Our Story", href: "/about" },
       { label: "Blog", href: "/blog" },
       { label: "Career", href: "/career" },
-      { label: "Delivery", href: "/delivery" },
+          { label: "Trade", href: "/trade" },
+    
       { label: "Ambassador", href: "/ambassdor" },
-      { label: "Affilate", href: "/affliate" },
+      { label: "Affiliate", href: "/affliate" },
 
       { label: "Contact Us", href: "https://wa.me/2348068520499" },
       { label: "TC", href: "/tc" },

@@ -2,22 +2,73 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+
 import Header from "./component/Header";
 import Footer from "./component/footer";
 
-// Replace these image paths with your own Norden images
-// Place the images inside public/images/customization/
+// ============================================
+// ONLINE FURNITURE IMAGES
+// ============================================
 
 const images = {
-  hero: "/images/customization/hero.jpg",
-  fabric: "/images/customization/fabric.jpg",
-  leather: "/images/customization/leather.jpg",
-  craftsmanship: "/images/customization/craftsmanship.jpg",
-  sofa: "/images/customization/sofa.jpg",
-  bed: "/images/customization/bed.jpg",
-  dining: "/images/customization/dining.jpg",
-  living: "/images/customization/living.jpg",
+  hero:
+    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85",
+
+  fabric:
+    "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1400&q=85",
+
+  leather:
+    "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=1400&q=85",
+
+  craftsmanship:
+    "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1400&q=85",
+
+  sofa:
+    "https://images.unsplash.com/photo-1550254478-ead40cc54513?auto=format&fit=crop&w=1200&q=85",
+
+  bed:
+    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",
+
+  dining:
+    "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=1200&q=85",
+
+  living:
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
 };
+
+// ============================================
+// EMAIL ENQUIRY
+// ============================================
+
+const ENQUIRY_EMAIL = "info@thenorden.org";
+
+function createEnquiryLink(product = "") {
+  const subject = product
+    ? `Norden Customization Enquiry - ${product}`
+    : "Furniture Customization Enquiry - Norden";
+
+  const body = `Hello Norden Team,
+
+I'm interested in customizing a furniture piece.
+
+Furniture I'm interested in: ${product}
+Preferred fabric or material:
+Preferred colour:
+Preferred dimensions:
+Additional details:
+
+I would love to know more about the available customization options, pricing, and production timeline.
+
+Thank you.`;
+
+  return `mailto:${ENQUIRY_EMAIL}?subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`;
+}
+
+// ============================================
+// FEATURES
+// ============================================
 
 const features = [
   {
@@ -55,6 +106,10 @@ const features = [
   },
 ];
 
+// ============================================
+// COLLECTIONS
+// ============================================
+
 const collections = [
   {
     title: "Sofas",
@@ -82,6 +137,10 @@ const collections = [
   },
 ];
 
+// ============================================
+// CUSTOMIZATION PROCESS
+// ============================================
+
 const process = [
   {
     number: "01",
@@ -108,6 +167,10 @@ const process = [
       "Once everything is approved, your furniture moves into production, with the details considered from start to finish.",
   },
 ];
+
+// ============================================
+// FAQ
+// ============================================
 
 const faqs = [
   {
@@ -137,6 +200,10 @@ const faqs = [
   },
 ];
 
+// ============================================
+// ARROW ICON
+// ============================================
+
 function ArrowIcon({ diagonal = false }) {
   return (
     <svg
@@ -165,13 +232,20 @@ function ArrowIcon({ diagonal = false }) {
   );
 }
 
+// ============================================
+// MAIN PAGE
+// ============================================
+
 export default function CustomizationServicePage() {
   const [activeFaq, setActiveFaq] = useState(null);
 
   return (
     <>
       <Head>
-        <title>Customization Service | Norden Furniture Lagos</title>
+        <title>
+          Customization Service | Norden Furniture Lagos
+        </title>
+
         <meta
           name="description"
           content="Discover furniture customization with Norden, Lagos. Explore upholstery, colours, finishes and personalized furniture for your home."
@@ -181,17 +255,20 @@ export default function CustomizationServicePage() {
       <Header />
 
       <main className="norden-custom-page bg-[#F8F6F1] text-[#28251F]">
+
         {/* =========================================
-            HERO
+            HERO SECTION
         ========================================= */}
 
         <section className="relative flex min-h-[620px] items-center overflow-hidden bg-[#332C26] text-white md:min-h-[760px]">
           <div className="absolute inset-0">
             <img
               src={images.hero}
-              alt="Beautifully styled Norden furniture"
+              alt="Contemporary luxury living room"
               className="h-full w-full object-cover"
+              fetchPriority="high"
             />
+
             <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/35 to-black/10" />
           </div>
 
@@ -248,18 +325,18 @@ export default function CustomizationServicePage() {
           </h2>
 
           <p className="norden-body mx-auto max-w-[680px] text-[16px] leading-[1.95] text-[#726C64] sm:text-[19px]">
-            We believe the most beautiful spaces are the ones that
-            feel deeply personal. Whether you're drawn to timeless
-            neutrals, rich textures, or a statement finish,
-            customization allows you to create furniture that
-            belongs in your world.
+            We believe the most beautiful spaces are the ones
+            that feel deeply personal. Whether you're drawn
+            to timeless neutrals, rich textures, or a statement
+            finish, customization allows you to create furniture
+            that belongs in your world.
           </p>
 
           <div className="mx-auto mt-12 h-[1px] w-20 bg-[#8B3F1F]" />
         </section>
 
         {/* =========================================
-            MATERIALS / FEATURES
+            MATERIALS AND FEATURES
         ========================================= */}
 
         <section className="border-t border-[#E8E2D9]">
@@ -267,9 +344,13 @@ export default function CustomizationServicePage() {
             <div
               key={feature.number}
               className={`grid min-h-[580px] grid-cols-1 lg:grid-cols-2 ${
-                index % 2 === 1 ? "lg:[&>div:first-child]:order-2" : ""
+                index % 2 === 1
+                  ? "lg:[&>div:first-child]:order-2"
+                  : ""
               }`}
             >
+              {/* FEATURE IMAGE */}
+
               <div className="relative min-h-[360px] overflow-hidden bg-[#E8E2D9] sm:min-h-[480px] lg:min-h-[650px]">
                 <img
                   src={feature.image}
@@ -283,12 +364,15 @@ export default function CustomizationServicePage() {
                 </div>
               </div>
 
+              {/* FEATURE TEXT */}
+
               <div className="flex items-center bg-[#F8F6F1] px-6 py-20 sm:px-12 lg:px-[12%] lg:py-24">
                 <div className="w-full max-w-[560px]">
                   <div className="mb-12 flex items-center justify-between border-b border-[#DED7CC] pb-5">
                     <span className="text-[11px] tracking-[2px] text-[#8B3F1F]">
                       {feature.eyebrow}
                     </span>
+
                     <span className="norden-display text-[26px] text-[#A69B8D]">
                       {feature.number}
                     </span>
@@ -351,6 +435,7 @@ export default function CustomizationServicePage() {
               <p className="mb-5 text-[11px] uppercase tracking-[3px] text-[#8B3F1F]">
                 THE PROCESS
               </p>
+
               <h2 className="norden-display text-[clamp(42px,5vw,72px)] leading-[1.12]">
                 Your vision,
                 <br />
@@ -359,9 +444,9 @@ export default function CustomizationServicePage() {
             </div>
 
             <p className="norden-body max-w-[430px] text-[16px] leading-[1.9] text-[#726C64] md:ml-auto">
-              Customization should feel exciting, not complicated.
-              Our process is designed to help you make confident
-              choices, every step of the way.
+              Customization should feel exciting, not
+              complicated. Our process is designed to help
+              you make confident choices, every step of the way.
             </p>
           </div>
 
@@ -388,7 +473,7 @@ export default function CustomizationServicePage() {
         </section>
 
         {/* =========================================
-            COLLECTIONS
+            FURNITURE COLLECTIONS
         ========================================= */}
 
         <section className="bg-[#EDE9E1] px-6 py-24 sm:px-10 md:py-32 lg:px-20">
@@ -405,9 +490,9 @@ export default function CustomizationServicePage() {
               </div>
 
               <p className="norden-body max-w-[400px] text-[15px] leading-[1.9] text-[#726C64]">
-                Begin with a piece you love. Explore our collections
-                and discover the customization possibilities
-                available for your favourites.
+                Begin with a piece you love. Explore our
+                collections and discover the customization
+                possibilities available for your favourites.
               </p>
             </div>
 
@@ -421,7 +506,7 @@ export default function CustomizationServicePage() {
                   <div className="relative aspect-[1.2] overflow-hidden bg-[#DAD3C8]">
                     <img
                       src={collection.image}
-                      alt={`Norden ${collection.title}`}
+                      alt={`Furniture inspiration for ${collection.title}`}
                       loading="lazy"
                       className="norden-collection-image h-full w-full object-cover"
                     />
@@ -453,7 +538,7 @@ export default function CustomizationServicePage() {
         </section>
 
         {/* =========================================
-            LAGOS / LOCAL STORY
+            LAGOS BRAND STORY
         ========================================= */}
 
         <section className="grid grid-cols-1 lg:grid-cols-2">
@@ -470,15 +555,16 @@ export default function CustomizationServicePage() {
 
               <p className="norden-body mb-7 text-[16px] leading-[1.95] text-[#625C55]">
                 Lagos is a city of character, energy, and
-                individuality. No two homes tell quite the same
-                story, and we believe furniture should celebrate
-                that difference.
+                individuality. No two homes tell quite the
+                same story, and we believe furniture should
+                celebrate that difference.
               </p>
 
               <p className="norden-body text-[16px] leading-[1.95] text-[#625C55]">
-                At Norden, we bring a personal approach to furniture,
-                helping you explore pieces, materials, and finishes
-                that feel right for your home.
+                At Norden, we bring a personal approach to
+                furniture, helping you explore pieces,
+                materials, and finishes that feel right
+                for your home.
               </p>
             </div>
           </div>
@@ -486,7 +572,7 @@ export default function CustomizationServicePage() {
           <div className="relative min-h-[440px] bg-[#C4B5A3] lg:min-h-[650px]">
             <img
               src={images.living}
-              alt="Norden furniture for contemporary Lagos homes"
+              alt="Contemporary living room furniture"
               loading="lazy"
               className="absolute inset-0 h-full w-full object-cover"
             />
@@ -553,7 +639,7 @@ export default function CustomizationServicePage() {
         </section>
 
         {/* =========================================
-            FINAL CTA
+            FINAL ENQUIRY SECTION
         ========================================= */}
 
         <section className="bg-[#803D24] px-6 py-24 text-center text-white sm:px-10 md:py-36">
@@ -568,30 +654,46 @@ export default function CustomizationServicePage() {
           </h2>
 
           <p className="norden-body mx-auto mb-12 max-w-[570px] text-[16px] leading-[1.9] text-white/85 sm:text-[18px]">
-            Have a colour, fabric, or finish in mind? Tell us
-            what you're imagining. We'd love to help you
-            bring it to life.
+            Have a colour, fabric, or finish in mind?
+            Tell us what you're imagining. We'd love
+            to help you bring it to life.
           </p>
 
-          <Link
-            href="/contact"
+          {/* OPENS THE CUSTOMER'S EMAIL APP */}
+
+          <a
+            href={createEnquiryLink()}
             className="inline-flex min-h-[56px] items-center justify-center gap-12 border border-white bg-white px-8 py-4 text-[11px] uppercase tracking-[2px] text-[#803D24] transition-colors hover:bg-transparent hover:text-white"
           >
             ENQUIRE ABOUT CUSTOMIZATION
             <ArrowIcon diagonal />
-          </Link>
+          </a>
 
           <p className="mt-8 text-[12px] tracking-[1px] text-white/65">
             NORDEN · LAGOS, NIGERIA
+          </p>
+
+          <p className="mt-4 text-[13px] text-white/80">
+            <a
+              href={`mailto:${ENQUIRY_EMAIL}`}
+              className="underline underline-offset-4"
+            >
+              {ENQUIRY_EMAIL}
+            </a>
           </p>
         </section>
       </main>
 
       <Footer />
 
+      {/* =========================================
+          PAGE STYLING
+      ========================================= */}
+
       <style jsx global>{`
         .norden-custom-page {
           overflow-x: hidden;
+          scroll-behavior: smooth;
         }
 
         .norden-custom-page .norden-display {
@@ -614,12 +716,18 @@ export default function CustomizationServicePage() {
         }
 
         .norden-custom-page .norden-feature-image:hover,
-        .norden-custom-page a.group:hover .norden-collection-image {
+        .norden-custom-page
+          a.group:hover
+          .norden-collection-image {
           transform: scale(1.045);
         }
 
         .norden-custom-page button {
           cursor: pointer;
+        }
+
+        .norden-custom-page img {
+          display: block;
         }
 
         @media (max-width: 767px) {
