@@ -8,7 +8,7 @@ export default function CustomizationSection() {
       {/* LEFT IMAGE */}
       <div className="customization-image relative h-[300px] w-full overflow-hidden sm:h-[400px] md:h-[560px]">
         <img
-          src="/images/fabric.jpg"
+          src="./fabric.avif"
           alt="Norden premium furniture fabric samples"
           className="h-full w-full object-cover"
         />
@@ -27,12 +27,14 @@ export default function CustomizationSection() {
             pets, and everything in between.
           </p>
 
-          <Link
-            href="/custom"
-            className="customization-button inline-flex min-h-[50px] items-center justify-center rounded-[10px] border border-white bg-transparent px-5 py-3 text-[15px] font-normal uppercase tracking-[2px] text-white no-underline transition-all duration-300 hover:bg-white hover:text-[#803d24]"
-          >
-            Learn More
-          </Link>
+       
+<Link
+  href="/customization-service"
+  className="customization-button inline-flex min-h-[50px] items-center justify-center rounded-[10px] border border-white bg-transparent px-5 py-3 text-[15px] font-normal uppercase tracking-[2px] text-white no-underline transition-all duration-300 hover:bg-white hover:text-[#803d24]"
+>
+  Learn More
+</Link>
+
         </div>
       </div>
 
