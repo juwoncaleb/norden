@@ -7,6 +7,7 @@ import Footer from "./component/footer";
 import FAQ from "./component/faq";
 import ImageCarousel from "./component/carousel";
 import Link from "next/link";
+import CustomizationSection from "./component/custom";
 
 
 
@@ -62,6 +63,7 @@ export default function LandingPage({entries}) {
           <ImageCarousel />
         </div>
       </div>
+      <CustomizationSection/>
 
     <div className="bestselling">
         <center>
