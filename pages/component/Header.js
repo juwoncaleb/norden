@@ -10,6 +10,8 @@ import { useCartStore } from "../../store/cartStore";
 
 const NAV_LINKS = [
   { label: "Our Story", href: "/about" },
+    { label: "Swatches", href: "/swatches" },
+
   { label: "Delivery", href: "/delivery" },
 ];
 
