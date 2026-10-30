@@ -1,6 +1,5 @@
-import React from "react";
-import { Cormorant_Garamond } from "next/font/google";
 
+import React from "react";
 import Header from "./component/Header";
 import Footer from "./component/footer";
 
@@ -101,13 +100,10 @@ const sections = [
 
 export default function ProductGuarantee() {
   return (
-    <div className={cormorant.className}>
+    <div className="norden-guarantee-page">
       <Header />
 
-      <div
-        className="delivery_div"
-        style={pageStyle}
-      >
+      <div className="delivery_div" style={pageStyle}>
         <p className="delivery_font">
           Product Guarantee
         </p>
@@ -130,10 +126,7 @@ export default function ProductGuarantee() {
               </h2>
 
               {section.paragraphs.map((text, i) => (
-                <p
-                  key={i}
-                  className="mb-6"
-                >
+                <p key={i} className="mb-6">
                   {text}
                 </p>
               ))}
@@ -144,9 +137,7 @@ export default function ProductGuarantee() {
                   style={listStyle}
                 >
                   {section.list.map((item) => (
-                    <li key={item}>
-                      {item}
-                    </li>
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
               )}
@@ -156,6 +147,12 @@ export default function ProductGuarantee() {
       </div>
 
       <Footer />
+
+      <style jsx>{`
+        .norden-guarantee-page {
+          font-family: "Cormorant Garamond", Georgia, serif;
+        }
+      `}</style>
     </div>
   );
 }
