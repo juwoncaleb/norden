@@ -1,12 +1,12 @@
+
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Cormorant_Garamond } from "next/font/google";
+import styles from "./bestseller.module.scss";
 
-const serif = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
+// No next/font/google import.
+// The font is loaded through your global CSS/SCSS.
 
-const formatPrice = (n) => `₦${Number(n).toLocaleString("en-US")}`;
+const formatPrice = (n) =>
+  `₦${Number(n).toLocaleString("en-US")}`;
 
 export default function Bestsellers({ items = [] }) {
   const trackRef = useRef(null);
@@ -16,16 +16,25 @@ export default function Bestsellers({ items = [] }) {
   const updateArrows = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
+
     setCanPrev(el.scrollLeft > 4);
-    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    setCanNext(
+      el.scrollLeft + el.clientWidth < el.scrollWidth - 4
+    );
   }, []);
 
   useEffect(() => {
     updateArrows();
+
     const el = trackRef.current;
     if (!el) return;
-    el.addEventListener("scroll", updateArrows, { passive: true });
+
+    el.addEventListener("scroll", updateArrows, {
+      passive: true,
+    });
+
     window.addEventListener("resize", updateArrows);
+
     return () => {
       el.removeEventListener("scroll", updateArrows);
       window.removeEventListener("resize", updateArrows);
@@ -35,37 +44,72 @@ export default function Bestsellers({ items = [] }) {
   const scrollByCard = (dir) => {
     const el = trackRef.current;
     if (!el) return;
+
     const card = el.querySelector("li");
-    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-    const step = card ? card.offsetWidth + gap : el.clientWidth * 0.8;
-    el.scrollBy({ left: dir * step, behavior: "smooth" });
+
+    const gap =
+      parseFloat(getComputedStyle(el).columnGap) || 0;
+
+    const step = card
+      ? card.offsetWidth + gap
+      : el.clientWidth * 0.8;
+
+    el.scrollBy({
+      left: dir * step,
+      behavior: "smooth",
+    });
   };
 
   if (!items.length) return null;
 
   return (
-    <section className={`${styles.section} ${serif.className}`}>
+    <section
+      className={styles.section}
+      style={{
+        fontFamily:
+          '"Cormorant Garamond", Georgia, serif',
+      }}
+    >
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Curated Collection</p>
-        <h2 className={styles.title}>Bestsellers</h2>
+        <p className={styles.eyebrow}>
+          Curated Collection
+        </p>
+
+        <h2 className={styles.title}>
+          Bestsellers
+        </h2>
       </div>
 
       <ul className={styles.track} ref={trackRef}>
         {items.map((item) => {
           const img = item.images?.[0];
-          const subtitle = item.material || item.tags;
+
+          const subtitle =
+            item.material || item.tags;
+
           const hasDiscount =
-            item.discountedPrice != null && item.discountedPrice < item.price;
+            item.discountedPrice != null &&
+            item.discountedPrice < item.price;
 
           return (
-            <li className={styles.card} key={item.id}>
+            <li
+              className={styles.card}
+              key={item.id}
+            >
               <div className={styles.imageBox}>
-                <span className={`${styles.badge} ${!item.inStock ? styles.badgeOut : ""}`}>
-                  {item.inStock ? "Bestseller" : "Sold out"}
+                <span
+                  className={`${styles.badge} ${
+                    !item.inStock
+                      ? styles.badgeOut
+                      : ""
+                  }`}
+                >
+                  {item.inStock
+                    ? "Bestseller"
+                    : "Sold out"}
                 </span>
 
                 {img && (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     className={styles.image}
                     src={`${img.url}?w=700&fm=webp&q=80`}
@@ -75,15 +119,29 @@ export default function Bestsellers({ items = [] }) {
                 )}
               </div>
 
-              <h3 className={styles.name}>{item.title}</h3>
-              {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+              <h3 className={styles.name}>
+                {item.title}
+              </h3>
+
+              {subtitle && (
+                <p className={styles.subtitle}>
+                  {subtitle}
+                </p>
+              )}
 
               {item.price != null && (
                 <p className={styles.price}>
                   {hasDiscount ? (
                     <>
-                      {formatPrice(item.discountedPrice)}
-                      <span className={styles.oldPrice}>{formatPrice(item.price)}</span>
+                      {formatPrice(
+                        item.discountedPrice
+                      )}
+
+                      <span
+                        className={styles.oldPrice}
+                      >
+                        {formatPrice(item.price)}
+                      </span>
                     </>
                   ) : (
                     formatPrice(item.price)
@@ -96,10 +154,23 @@ export default function Bestsellers({ items = [] }) {
       </ul>
 
       <div className={styles.nav}>
-        <button type="button" className={styles.navBtn} onClick={() => scrollByCard(-1)} disabled={!canPrev} aria-label="Previous products">
+        <button
+          type="button"
+          className={styles.navBtn}
+          onClick={() => scrollByCard(-1)}
+          disabled={!canPrev}
+          aria-label="Previous products"
+        >
           ←
         </button>
-        <button type="button" className={styles.navBtn} onClick={() => scrollByCard(1)} disabled={!canNext} aria-label="Next products">
+
+        <button
+          type="button"
+          className={styles.navBtn}
+          onClick={() => scrollByCard(1)}
+          disabled={!canNext}
+          aria-label="Next products"
+        >
           →
         </button>
       </div>
