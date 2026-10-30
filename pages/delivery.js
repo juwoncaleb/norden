@@ -1,17 +1,16 @@
+
 import React from "react";
-import { Cormorant_Garamond } from "next/font/google";
 
 import Header from "./component/Header";
 import Footer from "./component/footer";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+// Load the font through CSS instead of next/font/google.
+// This avoids the Google Fonts build-time dependency on Vercel.
 
 const pageStyle = {
   paddingTop: "80px",
   paddingBottom: "80px",
+  fontFamily: '"Cormorant Garamond", Georgia, serif',
 };
 
 const headingStyle = {
@@ -112,16 +111,15 @@ const sections = [
 
 export default function Delivery() {
   return (
-    <div className={cormorant.className}>
+    <div
+      style={{
+        fontFamily: '"Cormorant Garamond", Georgia, serif',
+      }}
+    >
       <Header />
 
-      <div
-        className="delivery_div"
-        style={pageStyle}
-      >
-        <p className="delivery_font">
-          Delivery
-        </p>
+      <div className="delivery_div" style={pageStyle}>
+        <p className="delivery_font">Delivery</p>
 
         <div className="delivery_texts">
           <p className="mb-10">
@@ -141,10 +139,7 @@ export default function Delivery() {
               </h2>
 
               {section.paragraphs.map((text, i) => (
-                <p
-                  key={i}
-                  className="mb-6"
-                >
+                <p key={i} className="mb-6">
                   {text}
                 </p>
               ))}
@@ -155,9 +150,7 @@ export default function Delivery() {
                   style={listStyle}
                 >
                   {section.list.map((item) => (
-                    <li key={item}>
-                      {item}
-                    </li>
+                    <li key={item}>{item}</li>
                   ))}
                 </ul>
               )}
