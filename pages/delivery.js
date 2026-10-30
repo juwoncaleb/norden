@@ -144,6 +144,7 @@ export default function Delivery() {
                 </p>
               ))}
 
+
               {section.list && (
                 <ul
                   className="delivery_list mb-6"
