@@ -1,6 +1,5 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import styles from "./bestseller.module.scss";
 
 // No next/font/google import.
 // The font is loaded through your global CSS/SCSS.
