@@ -5,6 +5,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Radley:ital@0;1&display=swap");
+
+:root {
+  --font-heading: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Radley", Georgia, serif;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
 /* Your existing imports BELOW Tailwind */
 /* ==========================================
    NORDEN — GLOBAL VARIABLES

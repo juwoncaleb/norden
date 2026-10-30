@@ -4,11 +4,6 @@ import { Cormorant_Garamond } from "next/font/google";
 import Header from "./component/Header";
 import Footer from "./component/footer";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
 const pageStyle = {
   paddingTop: "80px",
   paddingBottom: "80px",
