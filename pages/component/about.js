@@ -327,6 +327,7 @@ export default function Product() {
           }
         }
       `}</style>
+      
     </section>
   );
 }
