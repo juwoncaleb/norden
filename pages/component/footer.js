@@ -59,7 +59,7 @@ const SOCIAL = [
     href: "https://web.facebook.com/profile.php?id=100080173489561&sk=followers",
   },
   { label: "p", name: "Pinterest" },
-  { label: "ig", name: "Instagram", href: "https://instagram.com/norden.hq" },
+  { label: "ig", name: "Instagram", href: "https://www.instagram.com/thenorden_hq" },
 ];
 
 const LEGAL = [
