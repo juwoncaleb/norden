@@ -79,16 +79,28 @@ const MENU = [
   },
 ];
 
+
 const PROFILE_LINKS = [
-  { label: "My Account", href: "/account", icon: "user" },
-  { label: "My Likes", href: "/likes", icon: "heart" },
-  { label: "My Orders", href: "/orders", icon: "package" },
   {
-    label: "My Addresses",
-    href: "/account/addresses",
-    icon: "pin",
+    label: "My Account",
+    href: "/account",
+    icon: "user",
   },
-  { label: "Help & Support", href: "/contact", icon: "help" },
+  {
+    label: "My Likes",
+    href: "/likes",
+    icon: "heart",
+  },
+  {
+    label: "My Orders",
+    href: "/orders",
+    icon: "package",
+  },
+  {
+    label: "Help & Support",
+    href: "https://wa.me/2348068520499",
+    icon: "help",
+  },
 ];
 
 const DESKTOP_QUERY = "(min-width: 1241px)";

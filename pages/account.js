@@ -11,7 +11,7 @@ const menuItems = [
   { name: "My Account", href: "/account", icon: "user" },
   { name: "My Orders", href: "/orders", icon: "package" },
   { name: "My Likes", href: "/likes", icon: "heart" },
-  { name: "Help & Support", href: "/contact", icon: "help" },
+  { name: "Help & Support", href: "https://wa.me/2348068520499", icon: "help" },
 ];
 
 function Icon({ name, size = 20 }) {
@@ -313,7 +313,7 @@ export default function Account() {
                       </p>
                     </div>
 
-                    <Link href="/contact">
+                    <Link href="https://wa.me/2348068520499">
                       Contact Support
                       <Icon name="arrow" size={18} />
                     </Link>

@@ -70,19 +70,7 @@ export default function LandingPage({entries}) {
       
       <CustomizationSection/>
 
-    <div className="bestselling">
-        <center>
-          <p className="modo_shop">Shop the look with NORDEN</p>
-          <p className="modo_text">
-            Thoughtfully made by people who live in homes, too. That’s why you
-            love them so much.
-          </p>
-          <Link href="./sofa">
-          <button className="view_all">View all</button>
-
-          </Link>
-        </center>
-      </div>
+  
 
 
 
@@ -105,6 +93,19 @@ export default function LandingPage({entries}) {
           </Link>
         </div>
       </section>
+        <div className="bestselling">
+        <center>
+          <p className="modo_shop">Shop the look with NORDEN</p>
+          <p className="modo_text">
+            Thoughtfully made by people who live in homes, too. That’s why you
+            love them so much.
+          </p>
+          <Link href="./sofa">
+          <button className="view_all">View all</button>
+
+          </Link>
+        </center>
+      </div>
         <div className="flex flex-col md:flex-row w-full md:h-screen">
               <div className="order-2 md:order-1 w-full md:w-1/2 md:h-full flex items-center justify-center px-6 py-12 md:px-10 md:py-0">
                 <div className="max-w-md abt_2 text-white text-center">
