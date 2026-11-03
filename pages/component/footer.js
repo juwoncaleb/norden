@@ -78,8 +78,12 @@ const SOCIAL = [
     href: "https://www.instagram.com/thenorden_hq",
     icon: "instagram",
   },
+  {
+    name: "TikTok",
+    href: "https://www.tiktok.com/@thenorden_hq?lang=en",
+    icon: "tiktok",
+  },
 ];
-
 // ============================================
 // LEGAL LINKS
 // ============================================
